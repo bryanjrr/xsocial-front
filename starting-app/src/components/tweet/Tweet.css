@@ -52,6 +52,9 @@
 }
 
 /* Emojis y botón de enviar */
+#labelimage {
+    display: none;
+}
 
 .message-creation .functionalities-container {
     display: flex;

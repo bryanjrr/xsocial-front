@@ -11,11 +11,6 @@ function Tweet() {
             <img src="https://avatars.githubusercontent.com/u/181368088?s=96&v=4" />
             <p className='name'>Bryanjrr</p>
           </section>
-          <section className='photo-section2 flex-center'>
-            <p className='username'>@bryanjr</p>
-            <span>.</span>
-            <p className='date'>3 Jun</p>
-          </section>
         </section >
 
         <section>
@@ -24,7 +19,10 @@ function Tweet() {
             <div className='functionalities-container'>
               <div className='functionalities'>
                 <span>
-                  <i class="fa-regular fa-image"></i>
+                  <label htmlFor="labelimage">
+                    <i class="fa-regular fa-image"></i>
+                  </label>
+                  <input type="file" id="labelimage" />
                 </span>
                 <span>
                   <i class="fa-regular fa-gif"></i>

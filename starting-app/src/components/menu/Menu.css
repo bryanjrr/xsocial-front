@@ -1,0 +1,44 @@
+.menu-container {
+    background-color: rgb(17, 15, 15);
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 15px;
+}
+
+.menu-container nav {
+    padding: 10px;
+}
+
+.menu-container nav div {
+    display: grid;
+    padding: 14px;
+    grid-template-columns: 10% 80%;
+    border-radius: 35px;
+    width: 80%;
+    gap: 30px;
+    align-items: center;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.menu-container nav div i {
+    margin-left: 25%;
+}
+
+.menu-navegador {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu-navegador div a {
+    color: white;
+    text-align: start;
+}
+
+.menu-container nav div:hover {
+    background-color: rgb(31, 30, 30);
+    
+}
