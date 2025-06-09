@@ -1,108 +1,118 @@
 /* Info personal Usuario */
 
 .info-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-    width: 40%;
-    gap: 9px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  width: 40%;
+  gap: 9px;
 }
 
 .flex-center {
-    display: flex;
-    gap: 5%;
-    align-items: center;
+  display: flex;
+  gap: 5%;
+  align-items: center;
 }
 
 .photo-section img {
-    width: 65px;
-    border-radius: 50%;
+  width: 65px;
+  border-radius: 50%;
 }
 
 .photo-section .name {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .photo-section2 {
-    align-items: end;
-    gap: 3%;
-    color: rgb(113, 118, 123);
+  align-items: end;
+  gap: 3%;
+  color: rgb(113, 118, 123);
 }
 
 .photo-section2 .username {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .photo-section2 .date {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 /* Creacion de mensaje */
 
 .message-creation textarea {
-    border: none;
-    border-bottom: solid 0.5px rgb(113, 118, 123);
-    width: 100%;
-    resize: none;
-    background-color: rgb(17, 15, 15);
-    outline: none;
-    margin-top: 20px;
-    font-size: 15px;
-    height: 120px;
+  border: none;
+  border-bottom: solid 0.5px rgb(113, 118, 123);
+  width: 100%;
+  resize: none;
+  background-color: rgb(17, 15, 15);
+  outline: none;
+  margin-top: 20px;
+  font-size: 15px;
+  height: 120px;
 }
 
 /* Emojis y botón de enviar */
 #labelimage {
-    display: none;
+  display: none;
 }
 
+.react-emoji {
+  display: none;
+}
+
+.emoji-picker {
+  position: absolute;
+}
 .message-creation .functionalities-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
 }
 
 .message-creation .functionalities-container button {
-    background-color: white;
-    color: black;
-    cursor: pointer;
-    font-weight: bold;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .message-creation .functionalities {
-    padding: 5px;
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    color: rgb(29, 155, 240);
-    cursor: pointer;
+  padding: 5px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  color: rgb(29, 155, 240);
+  cursor: pointer;
 }
 
 .message-creation .functionalities span {
-    border-radius: 50%;
-    padding: 2px;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.message-creation .functionalities span div {
+  position: absolute;
 }
 
 .message-creation .functionalities span:hover {
-    color: rgb(29, 155, 240);
-    opacity: 0.5;
+  color: rgb(29, 155, 240);
 }
 
 /* Lista de Mensajess */
 
 .message-list h3 {
-    text-align: start;
-    padding: 20px 0;
-    font-size: 18px;
+  text-align: start;
+  padding: 20px 0;
+  font-size: 18px;
 }
 
 .message-container {
-    border: solid 0.5px rgb(113, 118, 123, 0.5);
-    padding: 15px;
+  border: solid 0.5px rgb(113, 118, 123, 0.5);
+  padding: 15px;
 }
 
 .message-container .message {
-    margin-top: 12px;
-    text-align: justify;
-    width: 90%;
+  margin-top: 12px;
+  text-align: justify;
+  width: 90%;
 }
