@@ -1,17 +1,18 @@
-import { useState } from 'react'
-import './Menu.css'
-
+import { useState } from "react";
+import "./Menu.css";
+import AppRoutes from "../../routes/AppRoutes";
+import { Link } from "react-router-dom";
 
 function Menu() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <>
-      <section className='menu-container'>
-        <nav className='menu-navegador'>
+      <section className="menu-container">
+        <nav className="menu-navegador">
           <div>
             <i class="fa-solid fa-house"></i>
-            <a href="">Home</a>
+            <Link to="/">Home</Link>
           </div>
 
           <div>
@@ -23,10 +24,8 @@ function Menu() {
             <i class="fa-solid fa-user"></i>
             <a href="">Profile</a>
           </div>
-
         </nav>
-        <nav className='menu-navegador'>
-
+        <nav className="menu-navegador">
           <div>
             <i class="fa-solid fa-gear"></i>
             <a href="">Settings</a>
@@ -36,9 +35,9 @@ function Menu() {
             <a href="">Logout</a>
           </div>
         </nav>
-      </section >
+      </section>
     </>
-  )
+  );
 }
 
 export default Menu;

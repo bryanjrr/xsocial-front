@@ -66,7 +66,7 @@ function Tweet() {
             </div>
           </section>
           <section className="message-list">
-            <h3>List of messages</h3>
+            <h3>List of posts</h3>
             <div className="message-container">
               <div className="info-container ">
                 <section className="photo-section flex-center">
