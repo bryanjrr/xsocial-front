@@ -63,6 +63,7 @@
 .emoji-picker {
   position: absolute;
 }
+
 .message-creation .functionalities-container {
   display: flex;
   justify-content: space-between;

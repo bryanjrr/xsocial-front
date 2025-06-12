@@ -1,0 +1,65 @@
+.container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    padding: 0;
+    background: url("../../assets/bg-auth.jpg");
+    background-size: cover;
+
+}
+
+.Logo-container {
+    display: flex;
+    justify-content: center;
+    height: max-content;
+    font-size: 70px;
+    width: 100%;
+    margin-top: 10%;
+    height: 23vh;
+}
+
+.Logo-container h2 span {
+    color: black;
+    -webkit-text-stroke: 0.8px white;
+}
+
+.Auth-container {
+    border-radius: 10px;
+    width: 70%;
+    margin: 0 auto;
+    background-color: rgb(3, 3, 3);
+    border-bottom: none;
+}
+
+.custom-tabs .MuiTabs-indicator {
+    background-color: white !important;
+}
+
+.custom-tab {
+    color: white !important;
+    outline: none !important;
+}
+
+.custom-tab.Mui-selected {
+    color: white;
+    font-weight: bold;
+}
+
+.custom-tab:focus {
+    outline: none;
+}
+
+.buttons-container{
+    margin: 0 auto !important;
+}
+
+@keyframes fadeIn {
+    0% {
+        background-color: black;
+    }
+
+    100% {
+
+        background-color: rgb(173, 170, 170);
+    }
+}

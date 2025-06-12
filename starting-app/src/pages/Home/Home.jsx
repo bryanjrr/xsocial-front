@@ -1,8 +1,8 @@
 import { useState } from "react";
 import viteLogo from "/vite.svg";
 import "./Home.css";
-import Tweet from "../../components/tweet/Tweet";
-import Following from "../../components/following/Following";
+import Tweet from "../../components/Tweet/Tweet";
+import Following from "../../components/Following/Following";
 
 function Home() {
   const [count, setCount] = useState(0);

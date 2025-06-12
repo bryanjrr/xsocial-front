@@ -4,25 +4,25 @@ import AppRoutes from "../../routes/AppRoutes";
 import { Link } from "react-router-dom";
 
 function Menu() {
-  const [count, setCount] = useState(0);
-
+  /*   const [count, setCount] = useState(0);
+   */
   return (
     <>
       <section className="menu-container">
         <nav className="menu-navegador">
           <div>
-            <i class="fa-solid fa-house"></i>
+            <i className="fa-solid fa-house"></i>
             <Link to="/">Home</Link>
           </div>
 
           <div>
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <i className="fa-solid fa-magnifying-glass"></i>
             <a href="">Feed</a>
           </div>
 
           <div>
-            <i class="fa-solid fa-user"></i>
-            <a href="">Profile</a>
+            <i className="fa-solid fa-user"></i>
+            <Link to="/profile">Profile</Link>
           </div>
         </nav>
         <nav className="menu-navegador">
