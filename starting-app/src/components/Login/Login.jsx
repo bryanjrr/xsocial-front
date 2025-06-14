@@ -1,12 +1,14 @@
 import { useState } from "react";
-import "./Register.css";
+import "./Login.css";
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-function Register({ setAuth, setValue }) {
+function Login({ auth, setAuth, setValue }) {
+  const [count, setCount] = useState(0);
+
   const [visible, isVisible] = useState(1);
   const [type, setType] = useState("");
 
@@ -24,30 +26,13 @@ function Register({ setAuth, setValue }) {
     <>
       <section className="follow-container">
         <div className="title-container">
-          <h2>Create an Account</h2>
-          <p>Sign up now and start connecting with others! </p>
+          <h2>Login</h2>
+          <p>Welcome back! please enter your credentials. </p>
         </div>
         <div className="register-container">
-          <div className="regiser-flex">
-            <div className="regiser-flex-input">
-              <p>Name</p>
-              <input type="text" placeholder="Name" />
-            </div>
-
-            <div className="regiser-flex-input">
-              <p>Surname</p>
-              <input type="text" placeholder="Surname" />
-            </div>
-          </div>
-
           <div className="regiser-flex-input">
             <p>Email</p>
             <input type="email" placeholder="Email" />
-          </div>
-
-          <div className="regiser-flex-input">
-            <p>Username</p>
-            <input type="text" placeholder="Username" />
           </div>
 
           <div className="regiser-flex-input">
@@ -68,9 +53,9 @@ function Register({ setAuth, setValue }) {
         </div>
         <div className="forgot-container">
           <p>
-            Alredy have an account?{" "}
-            <a className="SignIn" onClick={() => setAuth(false) & setValue(1)}>
-              Sign In
+            Dont have an account?{" "}
+            <a className="SignIn" onClick={() => setAuth(true) & setValue(0)}>
+              Sign Up
             </a>
           </p>
         </div>
@@ -79,11 +64,11 @@ function Register({ setAuth, setValue }) {
           variant="contained"
           disableElevation
         >
-          Sign Up
+          LogIn
         </Button>{" "}
       </section>
     </>
   );
 }
 
-export default Register;
+export default Login;

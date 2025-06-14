@@ -1,0 +1,10 @@
+.container {
+  background-color: rgb(17, 15, 15);
+}
+
+.regiser-flex-input-icon {
+  position: absolute;
+  right: 13px;
+  top: 38px;
+  cursor: pointer;
+}
