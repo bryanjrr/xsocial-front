@@ -9,9 +9,8 @@ import Register from "../../components/Register/Register";
 import Login from "../../components/Login/Login";
 
 function Auth() {
-  const [count, setCount] = useState(0);
-  const [value, setValue] = React.useState(0);
-  const [auth, setAuth] = useState(true);
+  const [value, setValue] = React.useState(1);
+  const [auth, setAuth] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
