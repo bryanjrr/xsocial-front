@@ -51,6 +51,7 @@
 }
 
 .container {
+  height: max-content;
   border: none;
   border-radius: 13px;
   font-family: 'Inter', sans-serif;

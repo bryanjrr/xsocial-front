@@ -8,12 +8,9 @@ import Auth from './pages/Auth/Auth.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Auth></Auth>
 
     <BrowserRouter>
-
-      {/*         <Menu className='menu' />
-        <App /> */}
+      <App></App>
     </BrowserRouter>
 
   </StrictMode>,

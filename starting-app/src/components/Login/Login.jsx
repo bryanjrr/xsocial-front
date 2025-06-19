@@ -10,6 +10,7 @@ function Login({ auth, setAuth, setValue }) {
 
   const [visible, isVisible] = useState(0);
   const [type, setType] = useState("password");
+  const [loading, isLoading] = useState(0);
 
   const {
     register,
@@ -18,10 +19,9 @@ function Login({ auth, setAuth, setValue }) {
     formState: { errors },
   } = useForm();
 
-
-  function onSubmit(data) {
-    console.log(data);
+  async function onSubmit(data) {
   }
+
 
   function handleVisible() {
     if (type == "password") {
@@ -32,6 +32,7 @@ function Login({ auth, setAuth, setValue }) {
       isVisible(false);
     }
   }
+
 
   return (
     <>

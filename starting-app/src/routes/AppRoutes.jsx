@@ -9,11 +9,14 @@ function AppRoutes() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/auth" element={<Auth />} />
-
+        <Route path="/" element={<Auth />} />
+        {/*  {
+    path: "*", 
+    element: <NotFoundPage />
+  } */}
       </Routes>
     </>
   );
