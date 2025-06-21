@@ -18,14 +18,13 @@ async function registerUser(user) {
 async function loginUser(user) {
   try {
     let response = await fetch("http://127.0.0.1:8000/api/login", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
     });
-    let data = await response.json();
-    console.log(data);
+    return response.json();
   } catch (error) {
     console.log(error);
   }

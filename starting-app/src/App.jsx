@@ -12,8 +12,12 @@ function App() {
 
   return (
     <>
-      <AppRoutes >
-      </AppRoutes>
+      <div className="container">
+  
+        <AppRoutes>
+        </AppRoutes>
+      </div>
+
     </>
   );
 }

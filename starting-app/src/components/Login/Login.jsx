@@ -5,12 +5,18 @@ import Button from "@mui/material/Button";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useForm } from "react-hook-form";
+import { loginUser } from "../../services/UserService";
+import { CircularProgress, Alert, AlertTitle } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Login({ auth, setAuth, setValue }) {
 
-  const [visible, isVisible] = useState(0);
+  const [visible, isVisible] = useState(false);
   const [type, setType] = useState("password");
-  const [loading, isLoading] = useState(0);
+  const [loading, isLoading] = useState(false);
+  const [Authenticated, setAuthenticated] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate()
 
   const {
     register,
@@ -20,8 +26,33 @@ function Login({ auth, setAuth, setValue }) {
   } = useForm();
 
   async function onSubmit(data) {
+    const response = await loginUser(data);
+    if (response.status == "success") {
+      localStorage.setItem("token", response.token);
+      showMessage(response.message, response.status);
+      setTimeout(function () {
+        navigate('/home');
+      }, 3000)
+    } else {
+      showMessage(response.message, response.status);
+    }
   }
 
+  function showMessage(message, type) {
+    if (type == "success") {
+      isLoading(false);
+      setAuthenticated(type);
+      setMessage(message);
+      setTimeout(function () {
+        setValue(1);
+        setAuth(false);
+      }, 3000)
+    } else if (type == "error") {
+      isLoading(false);
+      setAuthenticated(type);
+      setMessage(message);
+    }
+  }
 
   function handleVisible() {
     if (type == "password") {
@@ -93,12 +124,23 @@ function Login({ auth, setAuth, setValue }) {
         <Button
           className="register-button"
           variant="contained"
-          disableElevation
           type="submit"
+          disabled={loading}
         >
-          LogIn
+          {loading ? <CircularProgress color="inherit" size={24} /> : "Sign In"}
         </Button>{" "}
+
       </form>
+
+      {
+        Authenticated == "success" && message.length > 0 && <Alert className="alert-success" variant="standard" color={Authenticated} severity="success">
+          {message}</Alert>
+      }
+      {
+        Authenticated == "error" && message.length > 0 && <Alert className="alert-success" variant="standard" color={Authenticated} severity="error">
+          {message}
+        </Alert>
+      }
     </>
   );
 }

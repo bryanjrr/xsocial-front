@@ -6,7 +6,6 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 import { registerUser } from "../../services/UserService";
 import { CircularProgress, Alert, AlertTitle } from "@mui/material";
 
@@ -17,6 +16,8 @@ function Register({ setAuth, setValue }) {
   const [loading, isLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [Authenticated, setAuthenticated] = useState("");
+  const navigate = useNavigate()
+
 
   const {
     register,
@@ -38,14 +39,11 @@ function Register({ setAuth, setValue }) {
   async function onSubmit(data) {
     /* Hacer consulta a backend */
     isLoading(true);
-    console.log(data);
     let response = await registerUser(data);
-
-    if (response.success) {
-      console.log(response.message)
-      showMessage(response.message, "success");
-    } else {
-      showMessage(response.message, "error");
+    if (response.status == "success") {
+      showMessage(response.message, response.status);
+    } else if (response.status == "error") {
+      showMessage(response.message, response.status);
     }
   }
 
@@ -55,9 +53,10 @@ function Register({ setAuth, setValue }) {
       setAuthenticated(type);
       setMessage(message);
       setTimeout(function () {
-        useNavigate('/home');
-      }, 5000)
-    } else {
+        setValue(1);
+        setAuth(false);
+      }, 3000)
+    } else if (type == "error") {
       isLoading(false);
       setAuthenticated(type);
       setMessage(message);
@@ -173,9 +172,9 @@ function Register({ setAuth, setValue }) {
           {loading ? <CircularProgress color="inherit" size={24} /> : "Sign Up"}
         </Button>{" "}
       </form>
-      {Authenticated == "success" && message.length > 0 && <Alert className="alert-success" variant="standard" color="success" severity="success">
+      {Authenticated == "success" && message.length > 0 && <Alert className="alert-success" variant="standard" color={Authenticated} severity="success">
         {message}</Alert>}
-      {Authenticated == "error" && message.length > 0 && <Alert className="alert-success" variant="standard" color="error" severity="error">
+      {Authenticated == "error" && message.length > 0 && <Alert className="alert-success" variant="standard" color={Authenticated} severity="error">
         {message}
       </Alert>}
 
