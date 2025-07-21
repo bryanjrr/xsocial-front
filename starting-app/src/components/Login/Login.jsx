@@ -9,7 +9,7 @@ import { loginUser } from "../../services/UserService";
 import { CircularProgress, Alert, AlertTitle } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function Login({ auth, setAuth, setValue }) {
+function Login({ setAuth, setValue }) {
 
   const [visible, isVisible] = useState(false);
   const [type, setType] = useState("password");
@@ -26,14 +26,22 @@ function Login({ auth, setAuth, setValue }) {
   } = useForm();
 
   async function onSubmit(data) {
-    const response = await loginUser(data);
-    if (response.status == "success") {
-      localStorage.setItem("token", response.token);
-      showMessage(response.message, response.status);
-      setTimeout(function () {
-        navigate('/home');
-      }, 3000)
-    } else {
+
+    try {
+      isLoading(true);
+      const response = await loginUser(data);
+
+      if (response.status == "success") {
+        isLoading(false);
+        localStorage.setItem("token", response.token);
+        showMessage(response.message, response.status);
+        setTimeout(function () {
+          navigate('/home');
+        }, 2000)
+      } else {
+        showMessage(response.message, response.status);
+      }
+    } catch (e) {
       showMessage(response.message, response.status);
     }
   }

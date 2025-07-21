@@ -1,70 +1,89 @@
 .container {
-    background-color: rgb(17, 15, 15);
+  background-color: rgb(17, 15, 15);
 }
 
 .follow-container {
-/*     border: solid 0.5px rgb(113, 118, 123, 0.5);
- */    padding: 10%;
-    height: 50%;
-    padding: 4%;
-    border-radius: 15px;
-    height: max-content;
+  /*     border: solid 0.5px rgb(113, 118, 123, 0.5);
+ */
+  padding: 10%;
+  height: 50%;
+  padding: 4%;
+  border-radius: 15px;
+  height: max-content;
 }
 
 .follow-container h3 {
-    text-align: start;
-    font-weight: bold;
+  text-align: start;
+  font-weight: bold;
 }
 
 .container-card {
-    margin: 4% 0;
-    padding: 10px;
-    border-radius: 15px;
-    display: grid;
-    grid-template-columns: 70% 30%;
-    align-items: center;
-    justify-content: space-between;
+  margin: 4% 0;
+  padding: 10px;
+  border-radius: 15px;
+  display: grid;
+  grid-template-columns: 70% 30%;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(17, 15, 15);
 }
 
 .finfo-container {
-    align-items: center;
-    width: 80%;
-    gap: 9px;
+  align-items: center;
+  width: 80%;
+  gap: 9px;
 }
 
 .flex-center {
-    display: flex;
-    gap: 5%;
-    align-items: center;
+  display: flex;
+  gap: 5%;
+  align-items: center;
 }
 
 .photo-section img {
-    width: 65px;
-    border-radius: fit-content;
+  width: 65px;
+  border-radius: fit-content;
 }
 
 .photo-section .name {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .photo-section2 {
-    align-items: end;
-    gap: 3%;
-    color: rgb(113, 118, 123);
-    width: auto;
+  align-items: end;
+  gap: 3%;
+  color: rgb(113, 118, 123);
+  width: auto;
 }
 
 .photo-section2 .username {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .photo-section2 .date {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .container-follow button {
-    background-color: white;
-    color: black;
-    cursor: pointer;
-    font-weight: bold;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.no-following {
+  font-weight: bold;
+  color: rgb(113, 118, 123);
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgb(17, 15, 15);
+  border: 1px solid rgb(113, 118, 123, 0 0.5);
+}
+
+.is_following {
+  background-color: #50c8e8;
+  opacity: 0.7;
 }

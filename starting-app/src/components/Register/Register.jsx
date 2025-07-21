@@ -42,8 +42,11 @@ function Register({ setAuth, setValue }) {
     let response = await registerUser(data);
     if (response.status == "success") {
       showMessage(response.message, response.status);
+      console.log(response);
     } else if (response.status == "error") {
       showMessage(response.message, response.status);
+      console.log(response);
+
     }
   }
 

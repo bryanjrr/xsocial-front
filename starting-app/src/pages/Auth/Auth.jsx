@@ -55,7 +55,7 @@ function Auth() {
             )}
           </div>
         </article>
-        <div className="Logo-container"></div>
+        <div className="body-container"></div>
       </section>
     </>
   );

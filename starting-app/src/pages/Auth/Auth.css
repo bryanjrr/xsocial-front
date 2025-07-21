@@ -1,15 +1,24 @@
+* {
+  box-sizing: border-box;
+}
+
 #root {
   padding: 0;
   border-radius: initial;
 }
 
 .container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   padding: 0;
   background: url("../../assets/bg-auth.jpg");
   background-size: cover;
+  height: max-content;
+}
+
+.body-container {
+  width: 100%;
 }
 
 .Logo-container {
@@ -63,6 +72,10 @@
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   padding: 25px;
+}
+
+.MuiPaper-root{
+  margin-top: 20px;
 }
 
 @keyframes fadeIn {

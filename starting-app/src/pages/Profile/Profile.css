@@ -50,14 +50,7 @@
 }
 
 .container {
-  border: none;
-  border-radius: 13px;
-  font-family: "Inter", sans-serif;
-  padding: 30px;
-  background-color: rgb(17, 15, 15);
-  display: grid;
-  grid-template-columns: 65% 30%;
-  gap: 5%;
+  gap: 2%;
 }
 
 .main-container {

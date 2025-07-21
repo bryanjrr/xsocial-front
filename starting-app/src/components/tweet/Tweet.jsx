@@ -1,12 +1,20 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
+import { getUser } from "../../services/UserService";
+import { UserPost } from "../../services/PostService";
 import "./Tweet.css";
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 function Tweet() {
-  const [count, setCount] = useState(0);
   const [text, setText] = useState("");
   const [showPicker, setShowPicker] = useState(false);
+  const [Account, setUser] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  let postContent = {
+    "content": text
+  };
 
   const onEmojiSelect = (emoji) => {
     setText(text + emoji.native);
@@ -17,13 +25,41 @@ function Tweet() {
     showPicker ? setShowPicker(false) : setShowPicker(true);
   }
 
+  async function getUserInfo() {
+    let userResponse = await getUser(localStorage.getItem("token"));
+    setUser({ ...userResponse.user, ...userResponse.account_details });
+  }
+
+  async function handlePost(post) {
+    try {
+      let response = await UserPost(post);
+      setText("");
+      enqueueSnackbar(response.message, { variant: response.status, });
+    } catch (e) {
+      console.log(e);
+      enqueueSnackbar(response.message, {
+        variant: response.status, ContentProps: {
+          className: "my-snackbar",
+        },
+      });
+    }
+  }
+
+  useEffect(() => {
+    console.log("User actualizado:", Account);
+  }, [Account]);
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   return (
     <>
       <article>
         <section className="info-container">
           <section className="photo-section flex-center">
-            <img src="https://avatars.githubusercontent.com/u/181368088?s=96&v=4" />
-            <p className="name">Bryanjrr</p>
+            <img src={Account.photo} />
+            <p className="name">{Account.username}</p>
           </section>
         </section>
 
@@ -62,7 +98,8 @@ function Tweet() {
                   )}
                 </span>
               </div>
-              <button>Post</button>
+              <button onClick={() => handlePost(postContent)}>Post</button>
+
             </div>
           </section>
           <section className="message-list">
@@ -71,10 +108,10 @@ function Tweet() {
               <div className="info-container ">
                 <section className="photo-section flex-center">
                   <img src="https://avatars.githubusercontent.com/u/181368088?s=96&v=4" />
-                  <p className="name">Bryanjrr</p>
+                  <p className="name">{Account.username}</p>
                 </section>
                 <section className="photo-section2 flex-center">
-                  <p className="username">@bryanjr</p>
+                  <p className="username">{Account.username}</p>
                   <span>.</span>
                   <p className="date">3 Jun</p>
                 </section>

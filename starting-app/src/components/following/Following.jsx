@@ -1,75 +1,56 @@
-import { useState } from 'react'
+import { useState, useEffect, use } from 'react'
 import './Following.css'
+import { followingUsers } from '../../services/UserService';
+import confirmFollow from './confirmFollowing/confirmFollow';
 
 
 function Following() {
-  const [count, setCount] = useState(0)
+  const [users, setUsers] = useState([]);
+  const [followModal, setFollowModal] = useState(null);
+
+
+  async function fetchFollowingUsers() {
+    let users = await followingUsers(localStorage.getItem("token"), "Barcelona");
+    setUsers(users);
+    console.log("Data: ", users)
+  }
+
+  useEffect(function () {
+    fetchFollowingUsers();
+  }, []);
 
   return (
     <>
       <section className='follow-container'>
         <h3>Who to follow</h3>
-        <div className="container-card">
-          <section>
-            <section className='finfo-container'>
-              <section className='photo-section flex-center'>
-                <img src="https://avatars.githubusercontent.com/u/181368088?s=96&v=4" />
-                <p className='name'>Bryanjrr</p>
-              </section>
-              <section className='photo-section2 flex-center'>
-                <p className='username'>@bryanjr</p>
-                <span>.</span>
-                <p className='date'>3 Jun</p>
-              </section>
-            </section >
-          </section>
+        {users.length === 0 && (
+          <p className='no-following'>No users to follow</p>)}
+        {users.map(user => (
+          <div className="container-card">
+            <section>
+              <section className='finfo-container'>
+                <section className='photo-section flex-center'>
+                  <img src={user.photo} />
+                  <p className='name'>{user.account_details.full_name}</p>
+                </section>
+                <section className='photo-section2 flex-center'>
+                  <p className='username'>{user.username}</p>
+                  <span>.</span>
+                  <p className='date'>{user.account_details.union_date}</p>
+                </section>
+              </section >
+            </section>
 
-          <section className='container-follow'>
-            <button>Follow</button>
-          </section>
-        </div>
-        <div className="container-card">
-          <section>
-            <section className='finfo-container'>
-              <section className='photo-section flex-center'>
-                <img src="https://pbs.twimg.com/profile_images/1734158748061450240/SLkB77Fe_400x400.jpg" />
-                <p className='name'>miguel ortiz</p>
-              </section>
-              <section className='photo-section2 flex-center'>
-                <p className='username'>@miguel11mom</p>
-                <span>.</span>
-                <p className='date'>3 Jun</p>
-              </section>
-            </section >
-          </section>
-
-          <section className='container-follow'>
-            <button>Follow</button>
-          </section>
-        </div>
-        <div className="container-card">
-          <section>
-            <section className='finfo-container'>
-              <section className='photo-section flex-center'>
-                <img src="https://pbs.twimg.com/profile_images/1557504301878202368/rF3Ee8Z7_400x400.jpg" />
-                <p className='name'>Elmariana</p>
-              </section>
-              <section className='photo-section2 flex-center'>
-                <p className='username'>@elmarianaa</p>
-                <span>.</span>
-                <p className='date'>3 Jun</p>
-              </section>
-            </section >
-          </section>
-
-          <section className='container-follow'>
-            <button>Follow</button>
-          </section>
-        </div>
-
+            <section className='container-follow'>
+              {user.is_following ? <button className='is_following' onClick={() => setFollowModal(user.username)}>Following</button> : <button onClick={() => confirmFollow()}>Follow</button>}
+            </section>
+            {followModal === user.username && confirmFollow(user, setFollowModal)}
+          </div>
+        ))}
       </section>
     </>
   )
+
 }
 
 export default Following;

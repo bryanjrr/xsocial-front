@@ -1,0 +1,77 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.confirmContainer {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1c1c1e !important;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  z-index: 1001;
+  min-width: 320px;
+  max-width: 400px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.confirmContainer h2 {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: #fff;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  width: 100%;
+}
+
+.confirmContainer .MuiButton-root {
+  flex: 1;
+  border-radius: 25px;
+  font-weight: bold;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  text-transform: none;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.confirmContainer .cancel {
+  border-color: #ff4d4f;
+  color: #ff4d4f;
+}
+
+.confirmContainer .cancel:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+}
+
+.confirmContainer .confirm {
+  border-color: #2ecc71;
+  color: #2ecc71;
+}
+
+.confirmContainer .confirm:hover {
+  background-color: rgba(46, 204, 113, 0.1);
+}

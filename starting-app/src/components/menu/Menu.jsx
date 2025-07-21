@@ -1,6 +1,4 @@
-import { useState } from "react";
 import "./Menu.css";
-import AppRoutes from "../../routes/AppRoutes";
 import { Link } from "react-router-dom";
 
 function Menu() {
@@ -9,32 +7,51 @@ function Menu() {
   return (
     <>
       <section className="menu-container">
-        <nav className="menu-navegador">
-          <div>
-            <i className="fa-solid fa-house"></i>
-            <Link to="/">Home</Link>
-          </div>
+        <div className="menu-logo-container">
+          <h2>
+            <span>X</span><strong>sociaL</strong>
+          </h2>
+        </div>
+        <div className="menu">
+          <nav className="menu-navegador">
+            <div>
+              <i className="fa-solid fa-house"></i>
+              <Link to="/">Home</Link>
+            </div>
 
-          <div>
-            <i className="fa-solid fa-magnifying-glass"></i>
-            <a href="">Feed</a>
-          </div>
+            <div>
+              <i className="fa-solid fa-magnifying-glass"></i>
+              <a href="">Feed</a>
+            </div>
 
-          <div>
-            <i className="fa-solid fa-user"></i>
-            <Link to="/profile">Profile</Link>
-          </div>
-        </nav>
-        <nav className="menu-navegador">
-          <div>
-            <i class="fa-solid fa-gear"></i>
-            <a href="">Settings</a>
-          </div>
-          <div className="">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <a href="">Logout</a>
-          </div>
-        </nav>
+            <div>
+              <i className="fa-solid fa-user"></i>
+              <Link to="/profile">Profile</Link>
+            </div>
+
+            <div>
+              <i class="fa-solid fa-bell"></i>
+              <Link to="/notifications">Notifications</Link>
+            </div>
+
+            <div>
+              <i class="fa-solid fa-slot-machine"></i>
+              <Link to="/notifications">Games</Link>
+            </div>
+          </nav>
+          <nav className="menu-navegador">
+            <div>
+              <i class="fa-solid fa-gear"></i>
+              <a href="">Settings</a>
+            </div>
+            <div className="">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <a href="">Logout</a>
+            </div>
+          </nav>
+
+        </div>
+
       </section>
     </>
   );

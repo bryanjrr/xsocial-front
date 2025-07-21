@@ -3,7 +3,6 @@
   margin: 0;
 }
 
-
 #root {
   width: 100%;
   margin: 0;
@@ -51,18 +50,18 @@
 }
 
 .container {
-  height: max-content;
   border: none;
   border-radius: 13px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   padding: 30px;
   background-color: rgb(17, 15, 15);
   display: grid;
   grid-template-columns: 65% 30%;
-  gap: 5%;
+  gap: 1%;
+  height: fit-content;
 }
 
-.main-container{
+.main-container {
   display: grid;
   grid-template-columns: 20% 78%;
   gap: 2%;
