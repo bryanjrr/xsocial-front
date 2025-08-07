@@ -2,22 +2,43 @@ import { useState, useEffect, use } from 'react'
 import './Following.css'
 import { followingUsers } from '../../services/UserService';
 import confirmFollow from './confirmFollowing/confirmFollow';
+import { useSnackbar } from 'notistack';
+import { followUser } from '../../services/FollowService';
 
 
 function Following() {
   const [users, setUsers] = useState([]);
   const [followModal, setFollowModal] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
 
-
-  async function fetchFollowingUsers() {
-    let users = await followingUsers(localStorage.getItem("token"), "Barcelona");
-    setUsers(users);
-    console.log("Data: ", users)
-  }
 
   useEffect(function () {
     fetchFollowingUsers();
   }, []);
+
+  async function fetchFollowingUsers() {
+    let users = await followingUsers();
+    setUsers(users);
+  }
+
+  async function handleFollow(user) {
+    try {
+      let response = await followUser(localStorage.getItem("token"), user);
+      setUsers(prev =>
+        prev.map(u =>
+          u.id_user === user.id_user ? { ...u, is_following: true } : u
+        ));
+      enqueueSnackbar(response.message, { variant: response.status, });
+    } catch (e) {
+      console.log(e);
+      enqueueSnackbar(response.message, {
+        variant: response.status, ContentProps: {
+          className: "my-snackbar",
+        },
+      });
+    }
+  }
+
 
   return (
     <>
@@ -42,9 +63,9 @@ function Following() {
             </section>
 
             <section className='container-follow'>
-              {user.is_following ? <button className='is_following' onClick={() => setFollowModal(user.username)}>Following</button> : <button onClick={() => confirmFollow()}>Follow</button>}
+              {user.is_following ? <button className='is_following' onClick={() => setFollowModal(user.username)}>Following</button> : <button onClick={() => handleFollow(user)}>Follow</button>}
             </section>
-            {followModal === user.username && confirmFollow(user, setFollowModal)}
+            {followModal === user.username && confirmFollow(user, setFollowModal, setUsers)}
           </div>
         ))}
       </section>

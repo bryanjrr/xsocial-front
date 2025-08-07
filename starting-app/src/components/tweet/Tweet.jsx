@@ -1,16 +1,42 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import { getUser } from "../../services/UserService";
 import { UserPost } from "../../services/PostService";
 import "./Tweet.css";
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
+import SearchExperience from "../giphy/Giphy";
+import { useNavigate } from "react-router-dom";
+
+
 
 function Tweet() {
   const [text, setText] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [Account, setUser] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [showGifs, setShowGifs] = useState(false);
+  const [gifs, setGifs] = useState([]);
+  const navigate = useNavigate();
+  const editorRef = useRef(null);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      getUserInfo();
+    } else {
+      navigate("/auth");
+    }
+  }, []);
+
+  const addGif = (newGif) => {
+    if (gifs.length < 3) {
+      setGifs(prevGifs => [...prevGifs, newGif]);
+      console.log(newGif)
+      insertGifAtCursor(newGif) /* -------------------- */
+    } else {
+      enqueueSnackbar("Solo puedes añadir hasta 3 GIFs por publicación.", { variant: "info" });
+    }
+  };
 
   let postContent = {
     "content": text
@@ -32,26 +58,46 @@ function Tweet() {
 
   async function handlePost(post) {
     try {
+      console.log(post)
       let response = await UserPost(post);
       setText("");
       enqueueSnackbar(response.message, { variant: response.status, });
     } catch (e) {
-      console.log(e);
-      enqueueSnackbar(response.message, {
-        variant: response.status, ContentProps: {
-          className: "my-snackbar",
-        },
-      });
+      console.error(e);
     }
   }
 
-  useEffect(() => {
-    console.log("User actualizado:", Account);
-  }, [Account]);
+  const insertGifAtCursor = (url) => {
+    const editor = editorRef.current;
+    if (!editor) return;
 
-  useEffect(() => {
-    getUserInfo();
-  }, []);
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "gif";
+    img.className = "gif-inserted"; 
+
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(img);
+
+    const newRange = document.createRange();
+    newRange.setStartAfter(img);
+    newRange.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(newRange);
+
+    editor.focus();
+  };
+
+  const handleInput = (e) => {
+    const content = e.target.innerHTML;
+    console.log("Contenido actual:", content);
+  };
+
+
 
   return (
     <>
@@ -72,6 +118,19 @@ function Tweet() {
               value={text}
               onChange={(e) => setText(e.target.value)}
             ></textarea>
+            <div
+              contentEditable={true}
+              ref={editorRef}
+              className="editor"
+              onInput={handleInput}
+            />
+
+            <div className="gifList">
+              {gifs.map((item, index) => (
+                <img key={index} src={item} alt="" />
+              ))}
+            </div>
+
             <div className="functionalities-container">
               <div className="functionalities">
                 <span>
@@ -79,9 +138,6 @@ function Tweet() {
                     <i class="fa-regular fa-image"></i>
                   </label>
                   <input type="file" id="labelimage" />
-                </span>
-                <span>
-                  <i class="fa-regular fa-gif"></i>
                 </span>
                 <span>
                   <i
@@ -97,9 +153,18 @@ function Tweet() {
                     />
                   )}
                 </span>
+                <span onClick={() => setShowGifs(!showGifs)}>
+                  <i className="fa-regular fa-gif"></i>
+                </span>
+
+                {showGifs && (
+                  <div style={{ position: 'relative' }}>
+                    <SearchExperience addGif={addGif} />
+                  </div>
+                )}
+
               </div>
               <button onClick={() => handlePost(postContent)}>Post</button>
-
             </div>
           </section>
           <section className="message-list">

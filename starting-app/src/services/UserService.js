@@ -1,69 +1,40 @@
-import * as React from "react";
+import { apiClient } from "./ConfigService";
 
 async function registerUser(user) {
   try {
-    let response = await fetch("http://127.0.0.1:8000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-    return response.json();
+    const response = await apiClient.post("/register", user);
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
 async function loginUser(user) {
   try {
-    let response = await fetch("http://127.0.0.1:8000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-    return response.json();
+    const response = await apiClient.post("/login", user);
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
-async function followingUsers(token, location) {
+async function followingUsers(location) {
   try {
-    console.log(location);
-    let response = await fetch(
-      `http://127.0.0.1:8000/api/user/following?location=${location}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "http://127.0.0.1:8000",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        },
-      }
-    );
-    return response.json();
+    const response = await apiClient.get("/user/following", {
+      params: location ? { location } : {},
+    });
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
-async function getUser(token) {
+async function getUser() {
   try {
-    let response = await fetch(`http://127.0.0.1:8000/api/user`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-    return response.json();
+    const response = await apiClient.get("/user");
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 

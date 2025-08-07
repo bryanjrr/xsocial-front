@@ -1,27 +1,19 @@
 import * as React from "react";
+import { apiClient } from "./ConfigService";
+import axios from "axios";
 
 async function UserPost(postData) {
-  let token = localStorage.getItem("token");
-  console.log(token);
-
   const formData = new FormData();
   formData.append("content", postData.content);
-  if (postData.image) {
+  /*   if (postData.image) {
     formData.append("image", postData.image);
-  }
+  } */
 
   try {
-    let response = await fetch("http://127.0.0.1:8000/api/user/post", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + token,
-        Accept: "application/json",
-      },
-      body: formData,
-    });
-    return response.json();
+    let response = await apiClient.post("/user/post", formData);
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 export { UserPost };

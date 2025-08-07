@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Router, Navigate } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Profile from "../pages/Profile/Profile";
 import Auth from "../pages/Auth/Auth";
@@ -9,10 +9,11 @@ function AppRoutes() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Navigate to="/auth" replace />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/" element={<Auth />} />
+        <Route path="/auth" element={<Auth />} />
         {/*  {
     path: "*", 
     element: <NotFoundPage />

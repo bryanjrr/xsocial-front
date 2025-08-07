@@ -121,3 +121,46 @@
 .MuiSnackbar-anchorOriginBottomCenter {
   right: 0;
 }
+
+.gifList {
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 29%;
+  gap: 8px;
+}
+
+.gifList-item {
+  position: relative;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+
+.gifList-item:hover {
+  background: #222; /* Un poco gris */
+}
+
+.gifList img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gifList-item .delete-icon {
+  display: none;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  padding: 4px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.gifList-item:hover .delete-icon {
+  display: block;
+}

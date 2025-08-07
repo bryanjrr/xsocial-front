@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Login.css";
 import * as React from "react";
 import Button from "@mui/material/Button";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useForm } from "react-hook-form";
-import { loginUser } from "../../services/UserService";
+import { setAuthToken } from "../../services/ConfigService";
 import { CircularProgress, Alert, AlertTitle } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
 
 function Login({ setAuth, setValue }) {
 
@@ -25,15 +26,22 @@ function Login({ setAuth, setValue }) {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/home")
+    }
+  }, [])
+
   async function onSubmit(data) {
 
     try {
       isLoading(true);
       const response = await loginUser(data);
-
       if (response.status == "success") {
         isLoading(false);
         localStorage.setItem("token", response.token);
+        setAuthToken(localStorage.getItem("token"));
+        console.log(2)
         showMessage(response.message, response.status);
         setTimeout(function () {
           navigate('/home');
