@@ -18,7 +18,6 @@ function Tweet() {
   const [showGifs, setShowGifs] = useState(false);
   const [gifs, setGifs] = useState([]);
   const navigate = useNavigate();
-  const editorRef = useRef(null);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -29,17 +28,18 @@ function Tweet() {
   }, []);
 
   const addGif = (newGif) => {
-    if (gifs.length < 3) {
+    if (gifs.length < 1) {
       setGifs(prevGifs => [...prevGifs, newGif]);
       console.log(newGif)
       insertGifAtCursor(newGif) /* -------------------- */
     } else {
-      enqueueSnackbar("Solo puedes añadir hasta 3 GIFs por publicación.", { variant: "info" });
+      enqueueSnackbar("Solo puedes añadir 1 GIF por publicación.", { variant: "info" });
     }
   };
 
   let postContent = {
-    "content": text
+    "content": text,
+    "gif": gifs
   };
 
   const onEmojiSelect = (emoji) => {
@@ -56,48 +56,13 @@ function Tweet() {
     setUser({ ...userResponse.user, ...userResponse.account_details });
   }
 
-  async function handlePost(post) {
-    try {
-      console.log(post)
-      let response = await UserPost(post);
-      setText("");
-      enqueueSnackbar(response.message, { variant: response.status, });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  const insertGifAtCursor = (url) => {
-    const editor = editorRef.current;
-    if (!editor) return;
-
-    const img = document.createElement("img");
-    img.src = url;
-    img.alt = "gif";
-    img.className = "gif-inserted"; 
-
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return;
-
-    const range = selection.getRangeAt(0);
-    range.deleteContents();
-    range.insertNode(img);
-
-    const newRange = document.createRange();
-    newRange.setStartAfter(img);
-    newRange.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(newRange);
-
-    editor.focus();
+  const removeGif = (index) => {
+    const updated = gifs.filter((_, i) => i !== index);
+    setGifs(updated);
+    setEditorContent((prev) =>
+      prev.replace(/<img [^>]*src="[^"]+"[^>]*class="gif-inserted"[^>]*>/, "")
+    );
   };
-
-  const handleInput = (e) => {
-    const content = e.target.innerHTML;
-    console.log("Contenido actual:", content);
-  };
-
-
 
   return (
     <>
@@ -118,19 +83,13 @@ function Tweet() {
               value={text}
               onChange={(e) => setText(e.target.value)}
             ></textarea>
-            <div
-              contentEditable={true}
-              ref={editorRef}
-              className="editor"
-              onInput={handleInput}
-            />
 
-            <div className="gifList">
-              {gifs.map((item, index) => (
-                <img key={index} src={item} alt="" />
-              ))}
-            </div>
-
+            {gifs.map((gif, i) => (
+              <div key={i} className="gif-preview">
+                <img src={gif} alt={`gif-${i}`} />
+                <button className="gif-delete" onClick={() => removeGif(i)}>🗑️</button>
+              </div>
+            ))}
             <div className="functionalities-container">
               <div className="functionalities">
                 <span>
@@ -159,7 +118,7 @@ function Tweet() {
 
                 {showGifs && (
                   <div style={{ position: 'relative' }}>
-                    <SearchExperience addGif={addGif} />
+                    <SearchExperience addGif={addGif} setShowGifs={setShowGifs} />
                   </div>
                 )}
 

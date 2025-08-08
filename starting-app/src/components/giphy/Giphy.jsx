@@ -8,10 +8,12 @@ import {
 } from '@giphy/react-components';
 import { useContext, useState } from 'react';
 import "./Giphy.css";
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const gf = new GiphyFetch('AhnqYZcZo2ydVYmHV4cjjAl58XFhhaMa');
 
-const Components = ({ addGif }) => {
+const Components = ({ addGif, setShowGifs }) => {
   const { searchKey } = useContext(SearchContext);
   const [term, setTerm] = useState('');
 
@@ -26,6 +28,9 @@ const Components = ({ addGif }) => {
   return (
     <>
       <div className='giphy-container'>
+        <div className="close-container">
+          <CloseIcon className="close-icon" onClick={() => setShowGifs(false)} />
+        </div>
         <SearchBar onSearch={(value) => setTerm(value)} />
         <SuggestionBar
           height={300}
@@ -45,10 +50,10 @@ const Components = ({ addGif }) => {
   );
 };
 
-function SearchExperience({ addGif }) {
+function SearchExperience({ addGif, setShowGifs }) {
   return (
     <SearchContextManager apiKey="AhnqYZcZo2ydVYmHV4cjjAl58XFhhaMa">
-      <Components addGif={addGif} />
+      <Components addGif={addGif} setShowGifs={setShowGifs} />
     </SearchContextManager>
   );
 }
