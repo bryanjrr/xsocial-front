@@ -1,37 +1,18 @@
-async function UnfollowUser(token, user) {
+import { apiClient } from "./ConfigService";
+
+async function UnfollowUser(user) {
   try {
-    console.log(user);
-    let response = await fetch(`http://127.0.0.1:8000/api/user/following`, {
-      method: "DELETE",
-      body: JSON.stringify(user),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "http://127.0.0.1:8000",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    });
-    return response.json();
+    const response = await apiClient.delete("/user/following", user);
+    return response.data;
   } catch (error) {
     console.log(error);
   }
 }
 
-async function followUser(token, user) {
+async function followUser(user) {
   try {
-    let response = await fetch(`http://127.0.0.1:8000/api/user/following`, {
-      method: "POST",
-      body: JSON.stringify(user),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "http://127.0.0.1:8000",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    });
-    return response.json();
+    const response = await apiClient.post("/user/following", user);
+    return response.data;
   } catch (error) {
     console.log(error);
   }

@@ -77,4 +77,5 @@
   grid-template-columns: 65% 35%;
   margin: 13px;
   width: 80%;
+  gap: 20px;
 }

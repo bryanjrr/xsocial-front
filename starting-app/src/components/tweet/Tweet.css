@@ -1,199 +1,199 @@
-.message-creation .editor img.gif-inserted {
-  max-width: 100%;
-  height: auto;
-  display: inline-block;
-  cursor: move;
+/* -- CSS Variables for easy theming -- */
+:root {
+  --background-color: #1a202c; /* Fondo general oscuro */
+  --card-color: #2d3748; /* Color para los contenedores */
+  --text-color: #e2e8f0; /* Texto principal */
+  --secondary-text-color: #a0aec0; /* Texto secundario */
+  --primary-color: #1da1f2; /* Azul de Twitter */
+  --primary-color-hover: #1783c1; /* Azul más oscuro para hover */
+  --border-color: #4a5568; /* Bordes sutiles */
+  --border-color-light: #424956;
+  --transition-speed: 0.3s;
 }
 
-.message-creation .editor {
-  border: none;
-  border-bottom: solid 0.5px rgb(113, 118, 123);
-  width: 100%;
-  resize: none;
-  background-color: rgb(11 10 10);
-  outline: none;
-  margin-top: 20px;
-  font-size: 15px;
-  min-height: 120px;
-  max-height: 120px;
-  height: 120px;
-  overflow: auto;
-  padding: 4px 0;
-  text-align: left;
-  word-break: break-word;
-  white-space: pre-wrap;
-  position: relative;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
 }
-.message-creation .editor:empty:before {
-  content: attr(data-placeholder);
-  color: #888;
-  pointer-events: none;
-  font-size: 15px;
-  opacity: 0.7;
-  position: absolute;
-  left: 0.5rem;
-  top: 0.5rem;
-}
-/* Info personal Usuario */
 
+.tweet-container {
+  /* Nueva clase para el componente */
+  max-width: 80%;
+  margin: 20px auto;
+  background-color: var(--card-color);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+/* -- User Info Section -- */
 .info-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   align-items: center;
-  width: 40%;
-  gap: 9px;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.flex-center {
+.photo-section {
   display: flex;
-  gap: 5%;
   align-items: center;
+  gap: 12px;
 }
 
 .photo-section img {
-  width: 65px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  transition: transform var(--transition-speed) ease-in-out;
+}
+
+.photo-section img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(29, 161, 242, 0.5);
 }
 
 .photo-section .name {
   font-weight: bold;
+  font-size: 1.1rem;
 }
 
-.photo-section2 {
-  align-items: end;
-  gap: 3%;
-  color: rgb(113, 118, 123);
+/* -- Message Creation Section -- */
+.message-creation {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
 }
-
-.photo-section2 .username {
-  font-size: 14px;
-}
-
-.photo-section2 .date {
-  font-size: 14px;
-}
-
-/* Creacion de mensaje */
 
 .message-creation textarea {
-  border: none;
-  border-bottom: solid 0.5px rgb(113, 118, 123);
   width: 100%;
+  min-height: 120px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color-light);
+  color: var(--text-color);
+  font-size: 1rem;
   resize: none;
-  background-color: rgb(11 10 10);
   outline: none;
-  margin-top: 20px;
-  font-size: 15px;
-  height: 120px;
+  padding: 10px 0;
+  transition: border-color var(--transition-speed);
 }
 
-.message-creation .editor {
-  border: none;
-  border-bottom: solid 0.5px rgb(113, 118, 123);
-  width: 100%;
-  resize: none;
-  background-color: rgb(11 10 10);
-  outline: none;
-  margin-top: 20px;
-  font-size: 15px;
-  min-height: 30px;
-  max-height: 120px;
-  overflow: auto;
-  padding: 4px 0;
+.message-creation textarea:focus {
+  border-color: var(--primary-color);
 }
 
-/* Emojis y botón de enviar */
+.message-creation textarea::placeholder {
+  color: var(--secondary-text-color);
+  opacity: 0.8;
+}
+
+/* -- Functionalities and Post Button -- */
+.functionalities-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+}
+
+/* Estilo para el botón habilitado */
+.functionalities-container .post-button-enabled {
+  background-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.functionalities-container .post-button-enabled:hover {
+  background-color: var(--primary-color-hover);
+}
+
+/* Estilo para el botón deshabilitado */
+.functionalities-container .post-button-disabled {
+  background-color: #1a1a1a; /* Un gris muy oscuro */
+  color: #6e6e6e; /* Texto gris claro */
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.functionalities {
+  display: flex;
+  gap: 15px;
+}
+
+.functionalities span {
+  cursor: pointer;
+  color: var(--secondary-text-color);
+  font-size: 1.2rem;
+  transition: color var(--transition-speed), transform var(--transition-speed);
+  padding: 6px;
+  border-radius: 50%;
+}
+
+.functionalities span:hover {
+  color: var(--primary-color);
+  background-color: rgba(29, 161, 242, 0.1);
+  transform: scale(1.1);
+}
+
+.functionalities span i {
+  pointer-events: none; /* Prevents icon click from interfering */
+}
+
+/* Ocultar el input de archivo */
 #labelimage {
   display: none;
 }
 
-.react-emoji {
-  display: none;
-}
-
-.emoji-picker {
-  position: absolute;
-}
-
-.message-creation .functionalities-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 5px;
-}
-
-.message-creation .functionalities-container button {
-  background-color: white;
-  color: black;
-  cursor: pointer;
+.functionalities-container button {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 16px;
   font-weight: bold;
-}
-
-.message-creation .functionalities {
-  padding: 5px;
-  display: flex;
-  justify-content: flex-start;
-  gap: 10px;
-  color: rgb(29, 155, 240);
   cursor: pointer;
+  transition: background-color var(--transition-speed);
+  position: relative;
 }
 
-.message-creation .functionalities span {
-  border-radius: 50%;
-  padding: 2px;
+.functionalities-container button:hover {
+  background-color: var(--primary-color-hover);
 }
 
-.message-creation .functionalities span div {
+.emoji-picker-container {
   position: absolute;
-}
-
-.message-creation .functionalities span:hover {
-  color: rgb(29, 155, 240);
-}
-
-/* Lista de Mensajess */
-
-.message-list h3 {
-  text-align: start;
-  padding: 20px 0;
-  font-size: 18px;
-}
-
-.message-container {
-  border: solid 0.5px rgb(113, 118, 123, 0.5);
-  padding: 15px;
-}
-
-.message-container .message {
-  margin-top: 12px;
-  text-align: justify;
-  width: 90%;
-}
-
-.MuiSnackbar-anchorOriginBottomCenter {
-  right: 0;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  animation: fadeInPop 0.3s ease-out;
 }
 
 .gif-preview {
   position: relative;
-  display: inline-block;
-  margin: 10px auto;
-  max-width: 100%;
+  display: block;
+  margin-top: 16px;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  animation: popIn 0.3s ease-out;
-  transition: transform 0.3s;
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: transform var(--transition-speed) ease-in-out;
+  width: 50%;
+  margin: 0 auto;
 }
 
 .gif-preview:hover {
   transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .gif-preview img {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 16px;
 }
 
 .gif-delete {
@@ -204,21 +204,74 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 1rem;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.2s;
 }
 
 .gif-preview:hover .gif-delete {
   opacity: 1;
+  transform: scale(1.1);
 }
 
+/* -- List of Posts Section -- */
+.message-list h3 {
+  font-size: 1.5rem;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  margin: 0;
+  text-align: left;
+}
+
+.message-container {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-speed);
+}
+
+.message-container:hover {
+  background-color: var(--card-color);
+  cursor: pointer;
+}
+
+.info-container.post-info {
+  display: flex;
+  gap: 12px;
+  border-bottom: none;
+  padding: 0;
+}
+
+.info-container.post-info .photo-section img {
+  width: 40px;
+  height: 40px;
+}
+
+.photo-section2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--secondary-text-color);
+  font-size: 0.9rem;
+}
+
+.message-section {
+  margin-left: 52px;
+  margin-top: 8px;
+  text-align: left;
+}
+
+.message-section .message {
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+/* -- Animations -- */
 @keyframes popIn {
   from {
     transform: scale(0.95);

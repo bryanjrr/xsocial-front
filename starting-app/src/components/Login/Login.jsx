@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { setAuthToken } from "../../services/ConfigService";
 import { CircularProgress, Alert, AlertTitle } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../services/UserService";
 
 
 function Login({ setAuth, setValue }) {
@@ -41,7 +42,6 @@ function Login({ setAuth, setValue }) {
         isLoading(false);
         localStorage.setItem("token", response.token);
         setAuthToken(localStorage.getItem("token"));
-        console.log(2)
         showMessage(response.message, response.status);
         setTimeout(function () {
           navigate('/home');
@@ -50,7 +50,7 @@ function Login({ setAuth, setValue }) {
         showMessage(response.message, response.status);
       }
     } catch (e) {
-      showMessage(response.message, response.status);
+      showMessage("Internal server error", "error");
     }
   }
 

@@ -1,77 +1,75 @@
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
-}
-
 .confirmContainer {
   position: fixed;
   top: 20%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #1c1c1e !important;
-  border-radius: 12px;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: linear-gradient(145deg, #1f1f22, #2a2a2d);
+  border-radius: 16px;
   padding: 2rem 2.5rem;
   z-index: 1001;
   min-width: 320px;
   max-width: 400px;
-  animation: fadeIn 0.2s ease-in-out;
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: popIn 0.35s ease forwards;
 }
 
-@keyframes fadeIn {
+
+@keyframes popIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -60%);
+    transform: translate(-50%, -60%) scale(0.8);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
 .confirmContainer h2 {
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-  color: #fff;
+  margin-bottom: 1.8rem;
+  font-size: 1.2rem;
+  color: #f1f1f1;
   text-align: center;
+  line-height: 1.5;
 }
 
 .buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   gap: 1rem;
   width: 100%;
 }
 
 .confirmContainer .MuiButton-root {
   flex: 1;
-  border-radius: 25px;
+  border-radius: 30px;
   font-weight: bold;
-  padding: 0.6rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
   text-transform: none;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   background: transparent;
 }
 
 .confirmContainer .cancel {
   border-color: #ff4d4f;
   color: #ff4d4f;
+  background: rgba(255, 77, 79, 0.05);
 }
 
 .confirmContainer .cancel:hover {
-  background-color: rgba(255, 77, 79, 0.1);
+  background-color: rgba(255, 77, 79, 0.15);
+  transform: scale(1.05);
 }
 
 .confirmContainer .confirm {
   border-color: #2ecc71;
   color: #2ecc71;
+  background: rgba(46, 204, 113, 0.05);
 }
 
 .confirmContainer .confirm:hover {
-  background-color: rgba(46, 204, 113, 0.1);
+  background-color: rgba(46, 204, 113, 0.15);
+  transform: scale(1.05);
 }

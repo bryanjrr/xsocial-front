@@ -1,14 +1,12 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import { getUser } from "../../services/UserService";
 import { UserPost } from "../../services/PostService";
 import "./Tweet.css";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 import SearchExperience from "../giphy/Giphy";
 import { useNavigate } from "react-router-dom";
-
-
 
 function Tweet() {
   const [text, setText] = useState("");
@@ -17,6 +15,10 @@ function Tweet() {
   const { enqueueSnackbar } = useSnackbar();
   const [showGifs, setShowGifs] = useState(false);
   const [gifs, setGifs] = useState([]);
+
+  // 🔒 Solo habilitado si hay texto
+  const isPostEnabled = text.trim() !== "";
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,17 +31,17 @@ function Tweet() {
 
   const addGif = (newGif) => {
     if (gifs.length < 1) {
-      setGifs(prevGifs => [...prevGifs, newGif]);
-      console.log(newGif)
-      insertGifAtCursor(newGif) /* -------------------- */
+      setGifs((prevGifs) => [...prevGifs, newGif]);
     } else {
-      enqueueSnackbar("Solo puedes añadir 1 GIF por publicación.", { variant: "info" });
+      enqueueSnackbar("Solo puedes añadir 1 GIF por publicación.", {
+        variant: "info",
+      });
     }
   };
 
   let postContent = {
-    "content": text,
-    "gif": gifs
+    content: text,
+    gif: gifs,
   };
 
   const onEmojiSelect = (emoji) => {
@@ -47,8 +49,24 @@ function Tweet() {
     setShowPicker(false);
   };
 
+  // 🔄 Al abrir picker, se cierran los gifs
   function handlePicker() {
-    showPicker ? setShowPicker(false) : setShowPicker(true);
+    if (showPicker) {
+      setShowPicker(false);
+    } else {
+      setShowPicker(true);
+      setShowGifs(false);
+    }
+  }
+
+  // 🔄 Al abrir gifs, se cierra el picker
+  function handleGifs() {
+    if (showGifs) {
+      setShowGifs(false);
+    } else {
+      setShowGifs(true);
+      setShowPicker(false);
+    }
   }
 
   async function getUserInfo() {
@@ -59,10 +77,20 @@ function Tweet() {
   const removeGif = (index) => {
     const updated = gifs.filter((_, i) => i !== index);
     setGifs(updated);
-    setEditorContent((prev) =>
-      prev.replace(/<img [^>]*src="[^"]+"[^>]*class="gif-inserted"[^>]*>/, "")
-    );
   };
+
+  async function handlePost(postContent) {
+    try {
+      let response = await UserPost(postContent);
+      enqueueSnackbar(response.message, { variant: response.status });
+      setText("");
+      setGifs([]);
+    } catch (e) {
+      enqueueSnackbar(e.response.data.message, {
+        variant: e.response.data.message,
+      });
+    }
+  }
 
   return (
     <>
@@ -77,8 +105,6 @@ function Tweet() {
         <section>
           <section className="message-creation">
             <textarea
-              name=""
-              id=""
               placeholder="¿What is happening?"
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -87,45 +113,61 @@ function Tweet() {
             {gifs.map((gif, i) => (
               <div key={i} className="gif-preview">
                 <img src={gif} alt={`gif-${i}`} />
-                <button className="gif-delete" onClick={() => removeGif(i)}>🗑️</button>
+                <button className="gif-delete" onClick={() => removeGif(i)}>
+                  🗑️
+                </button>
               </div>
             ))}
+
             <div className="functionalities-container">
               <div className="functionalities">
                 <span>
                   <label htmlFor="labelimage">
-                    <i class="fa-regular fa-image"></i>
+                    <i className="fa-regular fa-image"></i>
                   </label>
                   <input type="file" id="labelimage" />
                 </span>
-                <span>
-                  <i
-                    class="fa-solid fa-face-awesome"
-                    onClick={handlePicker}
-                  ></i>
-                  {showPicker && (
+
+                {/* Emoji picker */}
+                <span onClick={handlePicker}>
+                  <i className="fa-solid fa-face-awesome"></i>
+                </span>
+                {showPicker && (
+                  <div className="emoji-picker-container">
                     <Picker
                       id="emoji-picker"
                       data={data}
                       theme="auto"
                       onEmojiSelect={onEmojiSelect}
                     />
-                  )}
-                </span>
-                <span onClick={() => setShowGifs(!showGifs)}>
-                  <i className="fa-regular fa-gif"></i>
-                </span>
-
-                {showGifs && (
-                  <div style={{ position: 'relative' }}>
-                    <SearchExperience addGif={addGif} setShowGifs={setShowGifs} />
                   </div>
                 )}
 
+                {/* GIF selector */}
+                <span onClick={handleGifs}>
+                  <i className="fa-regular fa-gif"></i>
+                </span>
+                {showGifs && (
+                  <div style={{ position: "relative" }}>
+                    <SearchExperience addGif={addGif} setShowGifs={setShowGifs} />
+                  </div>
+                )}
               </div>
-              <button onClick={() => handlePost(postContent)}>Post</button>
+
+              <button
+                onClick={() => handlePost(postContent)}
+                disabled={!isPostEnabled}
+                className={
+                  isPostEnabled
+                    ? "post-button-enabled"
+                    : "post-button-disabled"
+                }
+              >
+                Post
+              </button>
             </div>
           </section>
+
           <section className="message-list">
             <h3>List of posts</h3>
             <div className="message-container">

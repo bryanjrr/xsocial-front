@@ -1,0 +1,209 @@
+:root {
+  --background-dark: rgb(11, 10, 10);
+  --text-primary: #ffffff;
+  --text-secondary: rgb(113, 118, 123);
+  --accent-blue: #50c8e8;
+  --online-green: #4caf50;
+  --dnd-red: #f44336;
+  --border-radius: 15px;
+  --spacing-unit: 1rem;
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --transition-speed: 0.2s;
+}
+
+.profile-container {
+  margin-top: auto;
+  padding: calc(var(--spacing-unit) * 0.75);
+  border-radius: 25px;
+  background-color: var(--background-dark);
+  transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+  cursor: pointer;
+}
+
+.profile-container:hover {
+  background-color: rgba(31, 30, 30, 0.8);
+  transform: translateX(5px);
+}
+
+.info-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: calc(var(--spacing-unit) * 0.75);
+  justify-content: space-between;
+}
+
+.photo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-section img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-blue);
+  transition: transform var(--transition-speed) ease-in-out;
+  cursor: pointer;
+}
+
+.photo-section img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(29, 161, 242, 0.5);
+}
+
+.photo-section .name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.real-name {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.more-icon {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.status-badge .MuiBadge-badge {
+  background-color: var(--online-green);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--background-dark);
+}
+
+.status-badge[status="dnd"] .MuiBadge-badge {
+  background-color: var(--dnd-red);
+}
+
+.mui-menu {
+  background-color: var(--background-dark) !important;
+  color: var(--text-primary);
+  border-radius: 25px;
+  box-shadow: var(--shadow-soft);
+  padding: 8px;
+}
+
+.mui-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 15px;
+  margin: 4px 0;
+  color: var(--text-primary) !important;
+  transition: background-color var(--transition-speed) ease;
+}
+
+.mui-menu-item:hover {
+  background-color: rgba(31, 30, 30, 0.8);
+}
+
+.logout-icon {
+  color: var(--text-primary);
+}
+
+.skeleton {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.skeleton-circular {
+  width: 48px !important;
+  height: 48px !important;
+}
+
+.skeleton-text {
+  height: 1.2rem !important;
+}
+
+/* Responsividad */
+@media (max-width: 1024px) {
+  .profile-container {
+    padding: calc(var(--spacing-unit) * 0.75);
+  }
+
+  .photo-section img,
+  .skeleton-circular {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .photo-section .name {
+    font-size: 1rem;
+  }
+
+  .real-name {
+    font-size: 0.8rem;
+  }
+
+  .more-icon {
+    font-size: 1.1rem;
+  }
+
+  .skeleton-text {
+    height: 1rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: calc(var(--spacing-unit) * 0.75);
+  }
+
+  .photo-section img,
+  .skeleton-circular {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .photo-section .name {
+    font-size: 0.9rem;
+  }
+
+  .real-name {
+    font-size: 0.75rem;
+  }
+
+  .more-icon {
+    font-size: 1rem;
+  }
+
+  .skeleton-text {
+    height: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .photo-section img,
+  .skeleton-circular {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .photo-section .name {
+    font-size: 0.8rem;
+  }
+
+  .real-name {
+    font-size: 0.7rem;
+  }
+
+  .more-icon {
+    font-size: 0.9rem;
+  }
+
+  .skeleton-text {
+    height: 0.8rem !important;
+  }
+}
