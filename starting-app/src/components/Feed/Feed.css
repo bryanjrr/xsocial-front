@@ -1,0 +1,66 @@
+.giphy-container {
+  position: absolute;
+  top: 120%; /* ajusta según el tamaño del botón */
+  left: 0;
+  z-index: 999;
+  width: 420px;
+  background: #161616;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.giphy-container input[type="text"] {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.giphy-container .giphy-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.giphy-container .giphy-gif {
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.giphy-container .giphy-gif:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+  .giphy-container {
+    width: 90vw;
+  }
+}
+
+.close-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 12px;
+}
+
+.close-container span {
+  font-size: 1.2rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.close-container span:hover {
+  background: rgba(255, 0, 0, 0.8);
+  transform: scale(1.1) rotate(5deg);
+}
