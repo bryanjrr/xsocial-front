@@ -182,7 +182,8 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   transition: transform var(--transition-speed) ease-in-out;
   width: 50%;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .gif-preview:hover {
@@ -263,12 +264,16 @@ body {
 .message-section {
   margin-left: 52px;
   margin-top: 8px;
-  text-align: left;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .message-section .message {
   line-height: 1.5;
   color: var(--text-color);
+  text-align: justify;
+  align-self: flex-start;
 }
 
 /* -- Animations -- */

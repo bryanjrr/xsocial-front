@@ -1,11 +1,90 @@
-.giphy-container {
-  position: absolute;
-  top: 120%; /* ajusta según el tamaño del botón */
-  left: 0;
-  z-index: 999;
-  width: 420px;
-  background: #161616;
-  border-radius: 12px;
+.tiktok-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-top: 14px;
+}
+.heart-anim, .comment-anim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(.4,2,.6,1);
+}
+.heart-anim:hover {
+  transform: scale(1.25) rotate(-12deg);
+}
+.comment-anim:hover {
+  transform: scale(1.18) rotate(8deg);
+}
+.heart-icon {
+  color: #fff;
+  font-size: 1.15rem !important;
+  transition: color 0.2s, filter 0.2s;
+  filter: none;
+}
+.heart-anim:hover .heart-icon {
+  color: #ff2d55;
+  filter: drop-shadow(0 0 12px #ff2d55);
+}
+.comment-icon {
+  color: #fff;
+  font-size: 1rem !important;
+  transition: color 0.2s, filter 0.2s;
+  filter: none;
+}
+.comment-anim:hover .comment-icon {
+  color: #00eaff;
+  filter: drop-shadow(0 0 12px #00eaff);
+}
+/* Animaciones y estilos para like/dislike y estrellitas */
+.like-dislike-container {
+  display: flex;
+  flex-direction: row;
+  /* TikTok style actions */
+  .tiktok-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 24px;
+    margin-top: 14px;
+  }
+  .heart-anim, .comment-anim {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.18s cubic-bezier(.4,2,.6,1);
+  }
+  .heart-anim:hover {
+    transform: scale(1.25) rotate(-12deg);
+  }
+  .comment-anim:hover {
+    transform: scale(1.18) rotate(8deg);
+  }
+  .heart-icon {
+    color: #fff;
+    font-size: 1.7rem !important;
+    transition: color 0.2s;
+    filter: drop-shadow(0 0 6px #ff2d55);
+  }
+  .heart-anim:hover .heart-icon {
+    color: #ff2d55;
+    filter: drop-shadow(0 0 12px #ff2d55);
+  }
+  .comment-icon {
+    color: #fff;
+    font-size: 1.5rem !important;
+    transition: color 0.2s;
+    filter: drop-shadow(0 0 6px #00eaff);
+  }
+  .comment-anim:hover .comment-icon {
+    color: #00eaff;
+    filter: drop-shadow(0 0 12px #00eaff);
+  }
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
   padding: 1rem;
   display: flex;
