@@ -21,10 +21,10 @@ function Tweet() {
   const [isFetching, setIsFetching] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [showGifs, setShowGifs] = useState(false);
-  const [gifs, setGifs] = useState([]);
+  const [gif, setGif] = useState(null); // Objeto { file_url, content_type }
   const navigate = useNavigate();
 
-  const isPostEnabled = text.trim() !== "";
+  const isPostEnabled = text.trim() !== "" || gif !== null;
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -56,13 +56,13 @@ function Tweet() {
       console.log("Cargando posts con cursor:", cursor);
       const response = await getFeed(cursor);
       console.log("Respuesta feed:", response);
-      if (response.data.length === 0) {
+      if (!response.data || response.data.length === 0) {
         setHasMore(false);
         return;
       }
       setPosts((prev) => {
         const newPosts = response.data.filter(
-          (newPost) => !prev.some((p) => p.id === newPost.id)
+          (newPost) => newPost && !prev.some((p) => p && p.id === newPost.id)
         );
         return [...prev, ...newPosts];
       });
@@ -79,18 +79,13 @@ function Tweet() {
   }
 
   const addGif = (newGif) => {
-    if (gifs.length < 1) {
-      setGifs((prevGifs) => [...prevGifs, newGif]);
-    } else {
+    if (gif) {
       enqueueSnackbar("Solo puedes añadir 1 GIF por publicación.", {
         variant: "info",
       });
+    } else {
+      setGif({ file_url: newGif, content_type: "gif" });
     }
-  };
-
-  let postContent = {
-    content: text,
-    gif: gifs,
   };
 
   const onEmojiSelect = (emoji) => {
@@ -116,20 +111,31 @@ function Tweet() {
     }
   }
 
-  const removeGif = (index) => {
-    const updated = gifs.filter((_, i) => i !== index);
-    setGifs(updated);
+  const removeGif = () => {
+    setGif(null);
   };
 
-  async function handlePost(postContent) {
+  async function handlePost() {
+    const postContent = {
+      content: text || "", // Asegurar que content no sea undefined
+      gif: gif ? gif.file_url : null,
+      type: gif ? "gif" : null,
+    };
+
     try {
+      console.log("Enviando post:", postContent);
       let response = await UserPost(postContent);
+      console.log("Respuesta del post:", response);
+      if (!response.data) {
+        throw new Error("No se recibieron datos del post creado");
+      }
       enqueueSnackbar(response.message, { variant: response.status });
       setText("");
-      setGifs([]);
-      setPosts((prev) => [response.data, ...prev]);
+      setGif(null);
+      setPosts((prev) => [response.data, ...prev.filter((p) => p)]);
     } catch (e) {
-      enqueueSnackbar(e.response?.data?.message || "Error al publicar", {
+      console.error("Error al publicar:", e.response || e);
+      enqueueSnackbar(e.response?.data?.message || "Error al publicar: " + e.message, {
         variant: "error",
       });
     }
@@ -189,14 +195,14 @@ function Tweet() {
                   onChange={(e) => setText(e.target.value)}
                 ></textarea>
 
-                {gifs.map((gif, i) => (
-                  <div key={i} className="gif-preview">
-                    <img src={gif} alt={`gif-${i}`} />
-                    <button className="gif-delete" onClick={() => removeGif(i)}>
+                {gif && (
+                  <div className="gif-preview">
+                    <img src={gif.file_url} alt="gif-preview" />
+                    <button className="gif-delete" onClick={removeGif}>
                       🗑️
                     </button>
                   </div>
-                ))}
+                )}
 
                 <div className="functionalities-container">
                   <div className="functionalities">
@@ -232,7 +238,7 @@ function Tweet() {
                   </div>
 
                   <button
-                    onClick={() => handlePost(postContent)}
+                    onClick={() => handlePost()}
                     disabled={!isPostEnabled}
                     className={isPostEnabled ? "post-button-enabled" : "post-button-disabled"}
                   >
