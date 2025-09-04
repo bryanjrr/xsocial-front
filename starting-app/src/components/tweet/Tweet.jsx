@@ -1,9 +1,8 @@
-import { useEffect, useReducer, useCallback, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
-import PropTypes from "prop-types";
 import { getUser } from "../../services/UserService";
-import { UserPost, getFeed, moderateImage } from "../../services/PostService";
+import { UserPost, getFeed } from "../../services/PostService";
 import "./Tweet.css";
 import { useSnackbar } from "notistack";
 import SearchExperience from "../giphy/Giphy";
@@ -11,122 +10,21 @@ import { useNavigate } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 import Feed from "../feed/Feed";
 
-// Custom hook para manejar la carga de posts
-const usePosts = (initialCursor = null) => {
-  const [state, dispatch] = useReducer(
-    (state, action) => {
-      switch (action.type) {
-        case "FETCHING":
-          return { ...state, isFetching: true };
-        case "SUCCESS":
-          return {
-            ...state,
-            posts: [...state.posts, ...action.payload.posts],
-            cursor: action.payload.cursor,
-            hasMore: action.payload.hasMore,
-            isFetching: false,
-          };
-        case "ERROR":
-          return { ...state, isFetching: false };
-        case "ADD_POST":
-          return {
-            ...state,
-            posts: [action.payload, ...state.posts],
-          };
-        default:
-          return state;
-      }
-    },
-    {
-      posts: [],
-      cursor: initialCursor,
-      hasMore: true,
-      isFetching: false,
-    }
-  );
-
-  const loadPosts = useCallback(async () => {
-    if (state.isFetching) return;
-    dispatch({ type: "FETCHING" });
-    try {
-      console.log("Cargando posts con cursor:", state.cursor);
-      const response = await getFeed(state.cursor);
-      console.log("Respuesta feed:", response);
-      if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
-        dispatch({ type: "SUCCESS", payload: { posts: [], cursor: null, hasMore: false } });
-        return;
-      }
-      const newPosts = response.data
-        .filter((newPost) => newPost && typeof newPost === "object" && newPost.id)
-        .map((post) => ({
-          ...post,
-          media: post.mediaPosts
-            ? post.mediaPosts.map((media) => ({
-                file_url: media.file_url,
-                content_type: media.content_type === 1 ? "gif" : "photo",
-              }))
-            : [],
-        }));
-      dispatch({
-        type: "SUCCESS",
-        payload: {
-          posts: newPosts.filter((np) => !state.posts.some((p) => p.id === np.id)),
-          cursor: response.pagination.next_cursor,
-          hasMore: true,
-        },
-      });
-    } catch (e) {
-      console.error("Error al cargar el feed:", e);
-      dispatch({ type: "ERROR" });
-    }
-  }, [state.cursor, state.isFetching]);
-
-  return { ...state, loadPosts, addPost: (post) => dispatch({ type: "ADD_POST", payload: post }) };
-};
-
-// Custom hook para manejar el formulario de publicación
-const usePostForm = () => {
-  const [state, dispatch] = useReducer(
-    (state, action) => {
-      switch (action.type) {
-        case "SET_TEXT":
-          return { ...state, text: action.payload };
-        case "SET_GIF":
-          return { ...state, gif: action.payload, image: null };
-        case "SET_IMAGE":
-          return { ...state, image: action.payload, gif: null };
-        case "SET_SHOW_PICKER":
-          return { ...state, showPicker: action.payload, showGifs: action.payload ? false : state.showGifs };
-        case "SET_SHOW_GIFS":
-          return { ...state, showGifs: action.payload, showPicker: action.payload ? false : state.showPicker };
-        case "RESET":
-          return { ...state, text: "", gif: null, image: null };
-        default:
-          return state;
-      }
-    },
-    {
-      text: "",
-      showPicker: false,
-      showGifs: false,
-      gif: null,
-      image: null,
-    }
-  );
-
-  return { ...state, dispatch };
-};
-
 function Tweet() {
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
-  const fileInputRef = useRef(null);
-  const [user, setUser] = useState({});
+  const [text, setText] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
+  const [Account, setUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { posts, cursor, hasMore, isFetching, loadPosts, addPost } = usePosts();
-  const { text, showPicker, showGifs, gif, image, dispatch } = usePostForm();
+  const [posts, setPosts] = useState([]);
+  const [cursor, setCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const [showGifs, setShowGifs] = useState(false);
+  const [gif, setGif] = useState(null); // Objeto { file_url, content_type }
+  const navigate = useNavigate();
 
-  const isPostEnabled = text.trim() !== "" || gif !== null || image !== null;
+  const isPostEnabled = text.trim() !== "" || gif !== null;
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -135,7 +33,7 @@ function Tweet() {
     } else {
       navigate("/auth");
     }
-  }, [navigate, loadPosts]);
+  }, [navigate]);
 
   async function getUserInfo() {
     try {
@@ -143,118 +41,103 @@ function Tweet() {
       setUser({ ...userResponse.user, ...userResponse.account_details });
     } catch (e) {
       console.error("Error fetching user:", e);
-      enqueueSnackbar("Error al cargar los datos del usuario", { variant: "error" });
+      enqueueSnackbar("Error al cargar los datos del usuario", {
+        variant: "error",
+      });
     } finally {
       setIsLoading(false);
     }
   }
 
+  async function loadPosts() {
+    if (isFetching) return;
+    setIsFetching(true);
+    try {
+      console.log("Cargando posts con cursor:", cursor);
+      const response = await getFeed(cursor);
+      console.log("Respuesta feed:", response);
+      if (!response.data || response.data.length === 0) {
+        setHasMore(false);
+        return;
+      }
+      setPosts((prev) => {
+        const newPosts = response.data.filter(
+          (newPost) => newPost && !prev.some((p) => p && p.id === newPost.id)
+        );
+        return [...prev, ...newPosts];
+      });
+      setCursor(response.pagination.next_cursor);
+    } catch (e) {
+      console.error("Error al cargar el feed:", e);
+      enqueueSnackbar("Error al cargar el feed. Reintentando...", {
+        variant: "warning",
+      });
+      setTimeout(loadPosts, 10000);
+    } finally {
+      setIsFetching(false);
+    }
+  }
+
   const addGif = (newGif) => {
-    if (gif || image) {
-      enqueueSnackbar("Solo puedes añadir 1 GIF o imagen por publicación.", { variant: "info" });
+    if (gif) {
+      enqueueSnackbar("Solo puedes añadir 1 GIF por publicación.", {
+        variant: "info",
+      });
     } else {
-      dispatch({ type: "SET_GIF", payload: { file_url: newGif, content_type: "gif" } });
+      setGif({ file_url: newGif, content_type: "gif" });
     }
   };
 
   const onEmojiSelect = (emoji) => {
-    dispatch({ type: "SET_TEXT", payload: text + emoji.native });
-    dispatch({ type: "SET_SHOW_PICKER", payload: false });
+    setText(text + emoji.native);
+    setShowPicker(false);
   };
 
-  const handlePicker = () => {
-    dispatch({ type: "SET_SHOW_PICKER", payload: !showPicker });
-  };
+  function handlePicker() {
+    if (showPicker) {
+      setShowPicker(false);
+    } else {
+      setShowPicker(true);
+      setShowGifs(false);
+    }
+  }
 
-  const handleGifs = () => {
-    dispatch({ type: "SET_SHOW_GIFS", payload: !showGifs });
-  };
+  function handleGifs() {
+    if (showGifs) {
+      setShowGifs(false);
+    } else {
+      setShowGifs(true);
+      setShowPicker(false);
+    }
+  }
 
   const removeGif = () => {
-    dispatch({ type: "SET_GIF", payload: null });
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (gif || image) {
-      enqueueSnackbar("Solo puedes añadir 1 GIF o imagen por publicación.", { variant: "info" });
-      return;
-    }
-    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
-      enqueueSnackbar("Solo se permiten imágenes JPEG, PNG, WebP o GIF.", { variant: "error" });
-      return;
-    }
-    if (image && image.previewUrl) {
-      URL.revokeObjectURL(image.previewUrl);
-    }
-    const previewUrl = URL.createObjectURL(file);
-    console.log("Nueva imagen seleccionada:", { file, previewUrl });
-    dispatch({ type: "SET_IMAGE", payload: { file, previewUrl } });
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const removeImage = () => {
-    console.log("Eliminando imagen:", image);
-    if (image && image.previewUrl) {
-      URL.revokeObjectURL(image.previewUrl);
-    }
-    dispatch({ type: "SET_IMAGE", payload: null });
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    setGif(null);
   };
 
   async function handlePost() {
+    const postContent = {
+      content: text || "", // Asegurar que content no sea undefined
+      gif: gif ? gif.file_url : null,
+      type: gif ? "gif" : null,
+    };
+
     try {
-      if (image) {
-        const isSafe = await moderateImage(image.file);
-        if (!isSafe) {
-          enqueueSnackbar("La imagen contiene contenido inapropiado y no puede ser publicada.", {
-            variant: "error",
-          });
-          return;
-        }
-      }
-
-      const postContent = {
-        content: text || "",
-        gif: gif ? gif.file_url : null,
-        media: image ? image.file : null,
-      };
-
       console.log("Enviando post:", postContent);
       let response = await UserPost(postContent);
       console.log("Respuesta del post:", response);
-      if (!response.data || typeof response.data !== "object" || !response.data.id) {
-        throw new Error("La respuesta de la API no contiene un post válido");
+      if (!response.data) {
+        throw new Error("No se recibieron datos del post creado");
       }
-
-      const normalizedPost = {
-        id: response.data.id,
-        content: response.data.content || text,
-        media: response.data.mediaPosts
-          ? response.data.mediaPosts.map((media) => ({
-              file_url: media.file_url,
-              content_type: media.content_type === 1 ? "gif" : "photo",
-            }))
-          : [],
-        user: response.data.user || user,
-        created_at: response.data.created_at || new Date().toISOString(),
-      };
-
-      enqueueSnackbar(response.message || "Post creado exitosamente", { variant: response.status || "success" });
-      dispatch({ type: "RESET" });
-      addPost(normalizedPost);
+      enqueueSnackbar(response.message, { variant: response.status });
+      setText("");
+      setGif(null);
+      setPosts((prev) => [response.data, ...prev.filter((p) => p)]);
     } catch (e) {
-      console.error("Error al publicar:", e.response?.data || e);
-      let errorMessage = e.response?.data?.message || "Error al publicar";
-      if (e.response?.data?.errors) {
-        errorMessage += ": " + Object.values(e.response.data.errors).flat().join(", ");
-      }
-      enqueueSnackbar(errorMessage, { variant: "error" });
+      console.error("Error al publicar:", e.response || e);
+      enqueueSnackbar(e.response?.data?.message || "Error al publicar: " + e.message, {
+        variant: "error",
+      });
     }
   }
 
@@ -275,10 +158,10 @@ function Tweet() {
             ) : (
               <>
                 <img
-                  src={user.photo || "default-profile.png"}
-                  alt={`${user.username || "Usuario"}'s profile`}
+                  src={Account.photo || "default-profile.png"}
+                  alt={`${Account.username || "Usuario"}'s profile`}
                 />
-                <p className="name">{user.username || "Usuario"}</p>
+                <p className="name">{Account.username || "Usuario"}</p>
               </>
             )}
           </section>
@@ -309,7 +192,7 @@ function Tweet() {
                 <textarea
                   placeholder="¿What is happening?"
                   value={text}
-                  onChange={(e) => dispatch({ type: "SET_TEXT", payload: e.target.value })}
+                  onChange={(e) => setText(e.target.value)}
                 ></textarea>
 
                 {gif && (
@@ -321,28 +204,13 @@ function Tweet() {
                   </div>
                 )}
 
-                {image && (
-                  <div className="image-preview" key={image.previewUrl}>
-                    <img src={image.previewUrl} alt="image-preview" />
-                    <button className="image-delete" onClick={removeImage}>
-                      🗑️
-                    </button>
-                  </div>
-                )}
-
                 <div className="functionalities-container">
                   <div className="functionalities">
                     <span>
                       <label htmlFor="labelimage">
                         <i className="fa-regular fa-image"></i>
                       </label>
-                      <input
-                        type="file"
-                        id="labelimage"
-                        accept="image/jpeg,image/png,image/webp,image/gif"
-                        onChange={handleImageChange}
-                        ref={fileInputRef}
-                      />
+                      <input type="file" id="labelimage" />
                     </span>
 
                     <span onClick={handlePicker}>
@@ -364,13 +232,13 @@ function Tweet() {
                     </span>
                     {showGifs && (
                       <div style={{ position: "relative" }}>
-                        <SearchExperience addGif={addGif} setShowGifs={(value) => dispatch({ type: "SET_SHOW_GIFS", payload: value })} />
+                        <SearchExperience addGif={addGif} setShowGifs={setShowGifs} />
                       </div>
                     )}
                   </div>
 
                   <button
-                    onClick={handlePost}
+                    onClick={() => handlePost()}
                     disabled={!isPostEnabled}
                     className={isPostEnabled ? "post-button-enabled" : "post-button-disabled"}
                   >
@@ -395,9 +263,5 @@ function Tweet() {
     </>
   );
 }
-
-Tweet.propTypes = {
-  // No props directas en Tweet, pero podrías añadirlas si se usa como subcomponente
-};
 
 export default Tweet;

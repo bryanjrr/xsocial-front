@@ -91,67 +91,67 @@ function Feed({ posts, isLoading, loadMorePosts, hasMore, type = "feed" }) {
           {posts.length === 0 ? (
             <p>No hay publicaciones para mostrar</p>
           ) : (
-            posts.map((post) => {
-              // Convertir post.media en array si es un objeto
-              const mediaArray = Array.isArray(post.media)
-                ? post.media
-                : post.media && typeof post.media === "object"
-                  ? [post.media]
-                  : [];
-              return (
-                <div key={post.id} className="message-container">
-                  <div className="info-container post-info">
-                    <section className="photo-section flex-center">
-                      <img
-                        src={post.user?.photo || "default-profile.png"}
-                        alt={`${post.user?.username || "Usuario"}'s profile`}
-                      />
-                      <p className="name">{post.user?.username || "Usuario"}</p>
-                    </section>
-                    <section className="photo-section2 flex-center">
-                      <p className="username">{post.user?.username || "Usuario"}</p>
-                      <span>.</span>
-                      <p className="date">{formatDate(post.created_at)}</p>
+            posts
+              .filter(post => post && typeof post === "object")
+              .map((post, index) => {
+                // Convertir post.media en array si es un objeto o undefined
+                const mediaArray = Array.isArray(post.media)
+                  ? post.media
+                  : post.media && typeof post.media === "object"
+                    ? [post.media]
+                    : [];
+                return (
+                  <div key={post.id + '-' + post.created_at} className="message-container">
+                    <div className="info-container post-info">
+                      <section className="photo-section flex-center">
+                        <img
+                          src={post.user?.photo || "default-profile.png"}
+                          alt={`${post.user?.username || "Usuario"}'s profile`}
+                        />
+                        <p className="name">{post.user?.username || "Usuario"}</p>
+                      </section>
+                      <section className="photo-section2 flex-center">
+                        <p className="username">{post.user?.username || "Usuario"}</p>
+                        <span>.</span>
+                        <p className="date">{formatDate(post.created_at)}</p>
+                      </section>
+                    </div>
+                    <section className="message-section flex-center">
+                      <p className="message">{post.content || ""}</p>
+                      {mediaArray.length > 0 && (
+                        <div className="media-preview">
+                          {mediaArray
+                            .filter((media) => {
+                              const isValid = ["gif", "image", "image/jpeg", "image/png", "image/gif", "image/webp"].includes(
+                                media.content_type?.toLowerCase().trim()
+                              ) || media.file_url instanceof Blob;
+                              return isValid;
+                            })
+                            .map((media, index) => (
+                              <MediaImage
+                                key={`media-${index}`}
+                                file={media.file_url}
+                                alt="Post media"
+                                className="gif-preview"
+                                onError={(e) => {
+                                  e.target.src = "/default-media.png";
+                                }}
+                              />
+                            ))}
+                        </div>
+                      )}
+                      <div className="tiktok-actions">
+                        <span className="heart-anim" title="Me gusta">
+                          <FavoriteIcon className="heart-icon" fontSize="medium" />
+                        </span>
+                        <span className="comment-anim" title="Comentar">
+                          <ChatBubbleOutlineIcon className="comment-icon" fontSize="medium" />
+                        </span>
+                      </div>
                     </section>
                   </div>
-                  <section className="message-section flex-center">
-                    <p className="message">{post.content || ""}</p>
-                    {mediaArray.length > 0 && (
-                      <div className="media-preview">
-                        {mediaArray
-                          .filter((media) => {
-                            const isValid = ["gif", "image", "image/jpeg", "image/png", "image/gif", "image/webp"].includes(
-                              media.content_type?.toLowerCase().trim()
-                            ) || media.file_url instanceof Blob;
-                            console.log("Media filter:", media, "isValid:", isValid);
-                            return isValid;
-                          })
-                          .map((media, index) => (
-                            <MediaImage
-                              key={`media-${index}`}
-                              file={media.file_url}
-                              alt="Post media"
-                              className="gif-preview"
-                              onError={(e) => {
-                                console.error(`Error cargando media ${index}:`, media.file_url);
-                                e.target.src = "/default-media.png";
-                              }}
-                            />
-                          ))}
-                      </div>
-                    )}
-                    <div className="tiktok-actions">
-                      <span className="heart-anim" title="Me gusta">
-                        <FavoriteIcon className="heart-icon" fontSize="medium" />
-                      </span>
-                      <span className="comment-anim" title="Comentar">
-                        <ChatBubbleOutlineIcon className="comment-icon" fontSize="medium" />
-                      </span>
-                    </div>
-                  </section>
-                </div>
-              );
-            })
+                );
+              })
           )}
         </InfiniteScroll>
       )}
