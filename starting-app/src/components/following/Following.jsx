@@ -18,15 +18,20 @@ function Following() {
 
   async function fetchFollowingUsers() {
     try {
-      const users = await followingUsers();
-      setUsers(users);
+      const response = await followingUsers();
+      console.log(response);
+      if (!Array.isArray(response.data)) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+      setUsers(response.data);
     } catch (e) {
+      console.error(e); // para depuración
       enqueueSnackbar("Error al cargar usuarios", { variant: "error" });
+      setUsers([]); // fallback seguro
     } finally {
       setIsLoading(false);
     }
   }
-
   async function handleFollow(user) {
     try {
       const response = await followUser(user);
@@ -81,7 +86,7 @@ function Following() {
                 className="skeleton skeleton-button"
               />
             </div>
-        
+
 
           </article>
         ))

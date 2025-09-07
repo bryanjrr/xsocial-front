@@ -1,3 +1,23 @@
+/* Wrapper para desplazar el contenido principal a la derecha del menú fixed */
+
+.main-content-wrapper {
+  padding-left: 320px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .main-content-wrapper {
+    padding-left: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content-wrapper {
+    padding-left: 0;
+    padding-top: 60px;
+  }
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -76,6 +96,6 @@
   display: grid;
   grid-template-columns: 65% 35%;
   margin: 13px;
-  width: 80%;
+  width: 100%;
   gap: 20px;
 }

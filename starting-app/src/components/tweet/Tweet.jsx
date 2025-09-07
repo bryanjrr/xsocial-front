@@ -8,7 +8,8 @@ import { useSnackbar } from "notistack";
 import SearchExperience from "../giphy/Giphy";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
-import Feed from "../feed/Feed";
+import Feed from "../Feed/Feed";
+
 
 function Tweet() {
   const [text, setText] = useState("");
@@ -22,6 +23,8 @@ function Tweet() {
   const { enqueueSnackbar } = useSnackbar();
   const [showGifs, setShowGifs] = useState(false);
   const [gif, setGif] = useState(null); // Objeto { file_url, content_type }
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
 
   const isPostEnabled = text.trim() !== "" || gif !== null;
@@ -115,16 +118,30 @@ function Tweet() {
     setGif(null);
   };
 
-  async function handlePost() {
-    const postContent = {
-      content: text || "", // Asegurar que content no sea undefined
-      gif: gif ? gif.file_url : null,
-      type: gif ? "gif" : null,
-    };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImage(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setImagePreview(reader.result);
+    reader.readAsDataURL(file);
+  };
 
+  const removeImage = () => {
+    setImage(null);
+    setImagePreview(null);
+  };
+
+  async function handlePost() {
+    // Captura el valor actual de text
+    const currentText = text;
     try {
-      console.log("Enviando post:", postContent);
-      let response = await UserPost(postContent);
+      console.log("Enviando post..." + currentText);
+      let response = await UserPost({
+        content: currentText,
+        gif: gif ? gif.file_url : undefined,
+        media: image,
+      });
       console.log("Respuesta del post:", response);
       if (!response.data) {
         throw new Error("No se recibieron datos del post creado");
@@ -132,6 +149,8 @@ function Tweet() {
       enqueueSnackbar(response.message, { variant: response.status });
       setText("");
       setGif(null);
+      setImage(null);
+      setImagePreview(null);
       setPosts((prev) => [response.data, ...prev.filter((p) => p)]);
     } catch (e) {
       console.error("Error al publicar:", e.response || e);
@@ -204,13 +223,22 @@ function Tweet() {
                   </div>
                 )}
 
+                {imagePreview && (
+                  <div className="gif-preview">
+                    <img src={imagePreview} alt="image-preview" />
+                    <button className="gif-delete" onClick={removeImage}>
+                      🗑️
+                    </button>
+                  </div>
+                )}
+
                 <div className="functionalities-container">
                   <div className="functionalities">
                     <span>
                       <label htmlFor="labelimage">
                         <i className="fa-regular fa-image"></i>
                       </label>
-                      <input type="file" id="labelimage" />
+                      <input type="file" id="labelimage" accept="image/*" style={{ display: "none" }} onChange={handleImageChange} />
                     </span>
 
                     <span onClick={handlePicker}>

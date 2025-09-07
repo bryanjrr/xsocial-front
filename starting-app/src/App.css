@@ -55,10 +55,28 @@
   font-family: "Inter", sans-serif;
   padding: 30px;
   background-color: rgb(17, 15, 15);
-  display: grid;
-  grid-template-columns: 65% 30%;
-  gap: 1%;
-  height: fit-content;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+    height: 100vh;
+  padding-left: 260px; /* Deja espacio para el menú fixed */
+  box-sizing: border-box;
+}
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr 280px;
+    gap: 18px;
+    padding-left: 190px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-left: 0;
+    padding-top: 60px;
+  }
 }
 
 .main-container {

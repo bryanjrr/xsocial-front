@@ -16,11 +16,19 @@
   display: flex;
   flex-direction: column;
   border-radius: var(--border-radius);
-  width: 22%;
-  margin: 13px;
+  width: 320px;
+  min-width: 240px;
+  max-width: 340px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
   padding: var(--spacing-unit);
   box-shadow: var(--shadow-soft);
-  position: relative;
+  z-index: 100;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .menu-logo-container {
@@ -68,7 +76,8 @@
   padding: calc(var(--spacing-unit) * 0.75);
   border-radius: 25px;
   cursor: pointer;
-  transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+  transition: background-color var(--transition-speed) ease,
+    transform var(--transition-speed) ease;
 }
 
 .menu-item:hover {
@@ -97,9 +106,10 @@
 /* Responsividad */
 @media (max-width: 1024px) {
   .menu-container {
-    width: 30%;
-    margin: calc(var(--spacing-unit) * 0.75);
-    padding: calc(var(--spacing-unit) * 0.75);
+    width: 180px;
+    min-width: 120px;
+    max-width: 200px;
+    padding: calc(var(--spacing-unit) * 0.5);
   }
 
   .menu-logo-container h2 {
@@ -113,23 +123,33 @@
 
 @media (max-width: 768px) {
   .menu-container {
-    width: 100%;
-    margin: 0 auto;
-    padding: var(--spacing-unit);
+    position: fixed;
+    width: 100vw;
+    min-width: 0;
+    max-width: 100vw;
+    left: 0;
+    top: 0;
+    height: 56px;
+    flex-direction: row;
+    align-items: center;
     border-radius: 0;
+    z-index: 200;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 8px;
   }
 
   .menu-logo-container {
-    padding: calc(var(--spacing-unit) * 0.5);
+    padding: 0 8px;
   }
 
   .menu-logo-container h2 {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
   }
 
   .menu-item {
     grid-template-columns: 25% 75%;
-    padding: calc(var(--spacing-unit) * 0.75);
+    padding: 8px 10px;
   }
 
   .menu-item a {

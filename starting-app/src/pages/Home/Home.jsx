@@ -16,22 +16,27 @@ if (token) {
 function Home() {
   return (
     <>
-      <section className="container">
-        <Menu></Menu>
-        <div className="mainContainer">
-          <SnackbarProvider maxSnack={2} anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-            style: { fontSize: '1.2rem', fontWeight: 'bold' },
-          }}>
-            <Tweet />
-            <Following />
-          </SnackbarProvider>
-
-        </div>
-      </section>
+      <div className="main-content-wrapper">
+      <Menu />
+        <section className="container">
+          <div className="mainContainer">
+            <SnackbarProvider maxSnack={2} anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+              style: { fontSize: '1.2rem', fontWeight: 'bold' },
+            }}>
+              <Tweet />
+              <Following />
+            </SnackbarProvider>
+          </div>
+        </section>
+      </div>
     </>
   );
+// CSS sugerido para main-content-wrapper (añadir en Home.css o global):
+// .main-content-wrapper { padding-left: 260px; box-sizing: border-box; }
+// @media (max-width: 1024px) { .main-content-wrapper { padding-left: 190px; } }
+// @media (max-width: 768px) { .main-content-wrapper { padding-left: 0; padding-top: 60px; } }
 }
 
 export default Home;

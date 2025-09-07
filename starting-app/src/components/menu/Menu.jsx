@@ -44,6 +44,7 @@ function Menu() {
   }, []);
 
   return (
+
     <section className="menu-container">
       <div className="menu-logo-container">
         <Link to="/">
@@ -69,6 +70,7 @@ function Menu() {
         isLoading={isLoading}
       />
     </section>
+
   );
 }
 

@@ -1,6 +1,7 @@
 import { apiClient } from "./ConfigService";
 import * as tf from "@tensorflow/tfjs";
 import * as nsfwjs from "nsfwjs";
+import axios from "axios";
 
 // Cargar el modelo NSFWJS una sola vez
 let nsfwModel = null;
@@ -36,8 +37,10 @@ async function moderateImage(file) {
     URL.revokeObjectURL(img.src);
 
     // Considerar la imagen no apta si tiene alta probabilidad de ser 'Porn' o 'Hentai'
-    const nsfwScore = predictions.find((p) => p.className === "Porn")?.probability || 0;
-    const hentaiScore = predictions.find((p) => p.className === "Hentai")?.probability || 0;
+    const nsfwScore =
+      predictions.find((p) => p.className === "Porn")?.probability || 0;
+    const hentaiScore =
+      predictions.find((p) => p.className === "Hentai")?.probability || 0;
     return nsfwScore < 0.5 && hentaiScore < 0.5; // Apta si ambos puntajes son bajos
   } catch (e) {
     console.error("Error al moderar la imagen:", e);
@@ -48,6 +51,7 @@ async function moderateImage(file) {
 // Crear una nueva publicación
 export const UserPost = async (postData) => {
   const formData = new FormData();
+  console.log(postData.content)
   formData.append("content", postData.content || "");
   if (postData.gif) {
     formData.append("gif", postData.gif);
@@ -61,7 +65,18 @@ export const UserPost = async (postData) => {
   console.log("Datos enviados a /user/post:", Object.fromEntries(formData));
 
   try {
-    const response = await apiClient.post("/user/post", formData);
+    /*     const response = await apiClient.post("/user/post", formData);
+     */
+    const response = await axios.post(
+      "http://127.0.0.1:8000/api/user/post",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     console.log("Respuesta de /user/post:", response.data);
     return response.data;
   } catch (e) {
