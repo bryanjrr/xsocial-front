@@ -3,7 +3,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import Skeleton from "@mui/material/Skeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useSnackbar } from "notistack";
+import { likePost } from "../../services/PostService";
 import "./Feed.css";
+
 
 // Componente para mostrar una imagen desde Blob o URL
 function MediaImage({ file, alt, className, onError }) {
@@ -33,7 +36,10 @@ function MediaImage({ file, alt, className, onError }) {
   );
 }
 
+
 function Feed({ posts, isLoading, loadMorePosts, hasMore, type = "feed" }) {
+  const { enqueueSnackbar } = useSnackbar();
+
   // Formatear fecha en un formato amigable (e.g., "20 ago 2025")
   const formatDate = (dateString) => {
     if (!dateString) return "Fecha desconocida";
@@ -44,6 +50,19 @@ function Feed({ posts, isLoading, loadMorePosts, hasMore, type = "feed" }) {
       year: "numeric",
     });
   };
+
+
+  async function handleLike(postId) {
+    console.log("id post interactuado: " + postId);
+    try {
+      let response = await likePost(postId);
+      enqueueSnackbar(response.message, { variant: response.status });
+
+    } catch (e) {
+      console.log(e);
+      enqueueSnackbar(e.response.data.message || "Internal Server Error", { variant: "error" });
+    }
+  }
 
   const TextSkeleton = ({ width }) => (
     <Skeleton variant="text" width={width} className="skeleton-text" />
@@ -93,7 +112,7 @@ function Feed({ posts, isLoading, loadMorePosts, hasMore, type = "feed" }) {
           ) : (
             posts
               .filter(post => post && typeof post === "object")
-              .map((post, index) => {
+              .map((post) => {
                 // Convertir post.media en array si es un objeto o undefined
                 const mediaArray = Array.isArray(post.media)
                   ? post.media
@@ -141,7 +160,7 @@ function Feed({ posts, isLoading, loadMorePosts, hasMore, type = "feed" }) {
                         </div>
                       )}
                       <div className="tiktok-actions">
-                        <span className="heart-anim" title="Me gusta">
+                        <span className="heart-anim" title="Me gusta" onClick={() => handleLike(post.id)}>
                           <FavoriteIcon className="heart-icon" fontSize="medium" />
                         </span>
                         <span className="comment-anim" title="Comentar">

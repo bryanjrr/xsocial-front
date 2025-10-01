@@ -127,6 +127,7 @@ function Tweet() {
     reader.readAsDataURL(file);
   };
 
+
   const removeImage = () => {
     setImage(null);
     setImagePreview(null);

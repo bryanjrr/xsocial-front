@@ -51,7 +51,7 @@ async function moderateImage(file) {
 // Crear una nueva publicación
 export const UserPost = async (postData) => {
   const formData = new FormData();
-  console.log(postData.content)
+  console.log(postData.content);
   formData.append("content", postData.content || "");
   if (postData.gif) {
     formData.append("gif", postData.gif);
@@ -96,6 +96,11 @@ export const getFeed = async (cursor) => {
   return response.data;
 };
 
+export const likePost = async (postId) => {
+  const response = await apiClient.post(`/post/${postId}/like`);
+  console.log("Response Interaction:", response.data);
+  return response.data;
+};
 // Obtener publicaciones de un usuario específico
 export const getUserPosts = async (username, cursor) => {
   const params = cursor

@@ -4,6 +4,7 @@ import Home from "../pages/Home/Home";
 import Profile from "../pages/Profile/Profile";
 import Auth from "../pages/Auth/Auth";
 import Settings from "../pages/Settings/Settings";
+import FeedThreads from "../pages/Feed/FeedThreads";
 
 function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ function AppRoutes() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/feed" element={<FeedThreads />} />
         {/*  {
     path: "*", 
     element: <NotFoundPage />
